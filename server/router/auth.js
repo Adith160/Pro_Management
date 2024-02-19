@@ -4,6 +4,7 @@ const bcrypt= require('bcrypt')
 const authValidation = require('../validations/authValidation')
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
+const verifyAuth = require('../middlewares/jwtMiddleware');
 
 router.post('/register', async (req,res)=>{
     try {
@@ -76,5 +77,39 @@ router.post('/login', async(req,res)=>{
         res.status(500).json({ errorMessage: "Internal Server Error" ,success: false,});
     }
 })
+
+router.put('/update', verifyAuth, async (req, res) => {
+    try {
+        const { name, password , userRefId} = req.body; // Retrieve new password from req.body
+
+        if (!password) {
+            return res.status(400).json({ error: "Invalid Password", success: false });
+        }
+
+        // Find the user by userId
+        const user = await User.findById(userRefId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found", success: false });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update the user's password
+        user.password = hashedPassword;
+        user.name = name;
+        // Save the updated user data
+        await user.save();
+
+        res.status(200).json({ message: "User Updated Successfully", success: true });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ errorMessage: "Internal Server Error", success: false });
+    }
+});
+
+
 
 module.exports = router;

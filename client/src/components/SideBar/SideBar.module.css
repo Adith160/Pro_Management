@@ -1,0 +1,27 @@
+.sideBar{
+    height: 99.5vh;
+    width: 20vw;
+    position: relative;
+    border-right: 1px solid rgb(179, 170, 170);
+}
+
+.headings{
+    font-weight: bold;
+}
+
+h1{
+    position: absolute;
+    bottom: 10%;
+    left: 5%;
+}
+
+/* SideBar.module.css */
+
+.menuList {
+    list-style-type: none;
+  }
+
+  .menuList li:hover{
+    background-color: aliceblue;
+    cursor: pointer;
+  }
