@@ -108,10 +108,10 @@ function Register() {
           </div>
      {/* form starts here */}
           <div className={styles.formDiv}>
-          <form  onSubmit={handleUserSubmit} >
-        <input name='name' placeholder='Name' type='tel' value={userData.name} onChange={handleOnChange} autoComplete="off" className={styles.nameIcon}></input>
+          <form  onSubmit={handleUserSubmit} autoComplete='off'>
+        <input name='name' placeholder='Name' type='tel' value={userData.name} onChange={handleOnChange}  className={styles.nameIcon}></input>
         {errors.name && <div className={styles.errorText}>{errors.name}</div>}
-        <input name='email' placeholder='Email' type='email' value={userData.email} onChange={handleOnChange}  autocomplete="new-password" className={styles.mailIcon}></input>
+        <input name='email' placeholder='Email' type='email' value={userData.email} onChange={handleOnChange}   className={styles.mailIcon}></input>
         {errors.email && <div className={styles.errorText}>{errors.email}</div>}
         <input name='password' placeholder='Password' type={showPassword ? 'text' : 'password'} value={userData.password} onChange={handleOnChange} className={styles.lockIcon}></input>
         <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>

@@ -11,7 +11,6 @@ function Login() {
     password: '',
   });
 
-
   const [errors, setErrors] = useState({
     email: '',
     password: '', 
@@ -93,8 +92,8 @@ function Login() {
           </div>
      {/* form starts here */}
           <div className={styles.formDiv}>
-          <form  onSubmit={handleUserSubmit} >
-        <input name='email' placeholder='Email' type='email' value={userData.email} onChange={handleOnChange}  autocomplete="new-password" className={styles.mailIcon}></input>
+          <form  onSubmit={handleUserSubmit} autocomplete="off">
+        <input name='email' placeholder='Email' type='email' value={userData.email} onChange={handleOnChange}   className={styles.mailIcon}></input>
         {errors.email && <div className={styles.errorText}>{errors.email}</div>}
         <input name='password' placeholder='Password' type={showPassword ? 'text' : 'password'} value={userData.password} onChange={handleOnChange} className={styles.lockIcon}></input>
         <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
