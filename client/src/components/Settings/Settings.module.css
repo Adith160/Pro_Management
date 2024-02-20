@@ -1,16 +1,70 @@
-body{
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-}
-
-.mainDiv{
-    display: flex;
-}
-
 .mainContainer{
-    height: 100vh;
-    width: 83vw;
-    background-color: aqua;
+    height: 100%;
+    width: 100%;
 }
+
+.formDiv{
+    height: 50%;
+    width: 60%;
+    margin-left: 5%;
+}
+.formDiv form{
+    height: 80%;
+    width: 45%;
+    margin-top: 5%;
+}
+
+.formDiv input{
+    height: 13%;
+    width: 100%;
+    margin-top: 4%;
+    border: 1px solid rgb(224, 218, 218);
+    border-radius: 1vh;
+    background-repeat: no-repeat;
+    background-position: 10px center; 
+    background-size: 20px; 
+    padding-left: 40px;
+}
+
+.nameIcon{
+    background-image: url('../../assets/icons/person.png');
+}
+    
+.lockIcon{
+    background-image: url('../../assets/icons/lock.png');    
+    position: relative;
+}
+
+.view{
+    position: absolute;
+    top: 27%;
+    left: 43.5%; 
+    transform: translateY(-50%);
+    width: 2%;
+    cursor: pointer;
+    width: 2%;
+    height: 4%;
+}
+
+.view2{
+    position: absolute;
+    top: 35%;
+    left: 43.5%; 
+    transform: translateY(-50%);
+    width: 2%;
+    cursor: pointer;
+    width: 2%;
+    height: 4%;
+}
+
+.submitBtn{
+    width: 115%;
+    margin-top: 10%;
+    border-radius: 3vh;
+    cursor: pointer;
+    height: 13%;
+    background-color: #17A2B8;
+    border: none;
+    color: white;
+}
+

@@ -2,7 +2,7 @@
     height: 99.5vh;
     width: 17vw;
     position: relative;
-    border-right: 1px solid rgb(179, 170, 170);
+    border-right: 1px solid rgb(235, 229, 229);
     color: #707070;
 }
 
@@ -36,8 +36,6 @@
     display: flex;
     justify-content: center;
 }
-
-/* SideBar.module.css */
 
 .menuList {
     list-style-type: none;

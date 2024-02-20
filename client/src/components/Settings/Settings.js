@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styles from './Settings.module.css'
-import SideBar from '../SideBar/SideBar'
 import {updateUser} from '../../api/auth'
 import viewIcon from '../../assets/icons/view.png'
 
@@ -80,23 +79,21 @@ function Settings() {
   };
   return (
     <>
-    <div className={styles.mainDiv}>
-    <SideBar Active={2} />
     <div className={styles.mainContainer}>
     <div className={styles.formDiv}>
           <form  onSubmit={handleUserSubmit} autocomplete="off">
+          <h2>Settings</h2>
         <input name='name' placeholder='Name' type='text' value={userData.name} onChange={handleOnChange}   className={styles.nameIcon}></input>
         {errors.name && <div className={styles.errorText}>{errors.name}</div>}
         <input name='password' placeholder='Password' type={showPassword ? 'text' : 'password'} value={userData.password} onChange={handleOnChange} className={styles.lockIcon}></input>
         <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
         {errors.password && <div className={styles.errorText}>{errors.password}</div>}
         <input name='password2' placeholder='Confirm Password' type='password' value={userData.password2} onChange={handleOnChange} className={styles.lockIcon}></input>
-        <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
+        <img src={viewIcon} alt='view' className={styles.view2} onClick={togglePasswordVisibility }/>
         {errors.password2 && <div className={styles.errorText}>{errors.password2}</div>}
         <button className={styles.submitBtn} type='submit'>Update</button>
       </form>
           </div>
-    </div>
     </div>
     </>
   )
