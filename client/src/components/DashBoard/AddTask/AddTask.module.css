@@ -1,0 +1,27 @@
+.mainDiv{
+    height: 100%;
+    width: 100vw;
+    margin-left: -17%;
+    position: fixed;
+    background-color: rgba(181, 193, 199, 0.502);
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addDiv{
+    height: 60%;
+    width: 35%;
+    border-radius: 2vh;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.addDiv input{
+    width: 90%;
+    height: 4vh;
+    border: 1px solid #b5c1c780;
+    border-radius: 1vh;
+}
