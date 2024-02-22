@@ -1,86 +1,72 @@
-import React, { useState } from 'react'
-import styles from './AddTask.module.css'
-import {loginUser} from '../../../api/auth'
+import React, { useState } from 'react';
+import styles from './AddTask.module.css';
+//import { loginUser } from '../../../api/auth';
+import greenIcon from '../../../assets/icons/GreenEllipse.png';
+import redIcon from '../../../assets/icons/RedEllipse.png';
+import blueIcon from '../../../assets/icons/BlueEllipse.png';
+import deleteIcon from '../../../assets/icons/Delete.png';
 
 function AddTask(props) {
+    const [tasks, setTasks] = useState([]);
+    const [taskTitle, setTaskTitle] = useState('');
 
-    const [userData, setUserData] = useState({
-        email: '',
-        password: '',
-      });
+    const addTask = () => {
+        setTasks([...tasks, { id: tasks.length + 1, title: taskTitle, completed: false }]);
+        setTaskTitle(''); // Clear the input field after adding task
+    };
 
-      const [errors, setErrors] = useState({
-        email: '',
-        password: '', 
-      })
+    const handleTaskCheckboxChange = (e, taskId) => {
+        const { checked } = e.target;
+        setTasks(tasks.map(task => task.id === taskId ? { ...task, completed: checked } : task));
+    };
 
-      const handleOnChange = (e) => {
-        e.stopPropagation(); // Prevent event from propagating to parent div
-        const { name, value } = e.target;
-        setUserData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [name]: '', // Clear the error when the user makes a change
-        }));
-      };
-      
+    const handleTaskRemove = (taskId) => {
+        setTasks(tasks.filter(task => task.id !== taskId));
+    };
 
-      const handleClick = (e) => {
+    const handleClick = (e) => {
         e.stopPropagation(); // Prevent event from bubbling up to parent
         props.handleShowAddTask();
-      };
+    };
 
     const handleUserSubmit = async (e) => {
         e.preventDefault();
-    
-        // Validate form fields
-        const newErrors = {};
-    
-        if (userData.password.trim() === '') {
-          newErrors.password = 'Field Is Required';
-        }
-    
-        if (userData.email.trim() === '') {
-          newErrors.email = 'Field Is Required';
-        }
-    
-        // Update the errors state
-        setErrors(newErrors);
-    
-        const resetForm = () => {
-          setUserData({
-            email: '',
-            password: '',
-          });
-        };
-    
-        if ((Object.keys(newErrors).length === 0) && (userData.check===true)){
-         
-          const response = await loginUser({ ...userData });
-          if(response){
-            localStorage.setItem("token", response.token);
-            localStorage.setItem("name", response.name)
-            resetForm();
-          }
-        }
-      }
-  return (
-    <div className={styles.mainDiv} onClick={handleClick}>
-        <div className={styles.addDiv} onClick={(e) => e.stopPropagation()}>
-            <form  onSubmit={handleUserSubmit} autocomplete="off">
-                <h6>Title</h6>
-                <input name='email' placeholder='Email' type='email' value={userData.email} onChange={handleOnChange}   className={styles.mailIcon}></input>
-                {errors.email && <div className={styles.errorText}>{errors.email}</div>}
-                {errors.password && <div className={styles.errorText}>{errors.password}</div>}
-                <button className={styles.submitBtn} type='submit'>Login</button>
-            </form>
+        // Save tasks to database
+        console.log(tasks);
+    };
+
+    return (
+        <div className={styles.mainDiv} onClick={handleClick}>
+            <div className={styles.addDiv} onClick={(e) => e.stopPropagation()}>
+                <form onSubmit={handleUserSubmit} autoComplete="off">
+                    <span>Title<sup>*</sup> </span>
+                    <div className={styles.priorityButtons}>
+                        <label htmlFor='priority'>
+                            <input name='title' placeholder='Enter Task Title' type='title' value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} className={styles.mailIcon} required />
+                            Select Priority <sup>*</sup>
+                            <button className={styles.prioBtn}> <img src={redIcon} alt='red' />HIGH PRIORITY</button>
+                            <button className={styles.prioBtn}> <img src={blueIcon} alt='blue' />MODERATE PRIORITY</button>
+                            <button className={styles.prioBtn}> <img src={greenIcon} alt='green' />LOW PRIORITY</button>
+                        </label>
+                    </div>
+                    <span>Checklist ({tasks.filter(task => task.completed).length}/{tasks.length})<sup>*</sup> </span>
+                    <button className={styles.addBtn} type="button" onClick={addTask}>+ Add New</button>
+                    <div className={styles.addedTasks}>
+                        {tasks.map(task => (
+                            <div key={task.id} className={styles.taskItem}>
+                                <input type='checkbox' checked={task.completed} onChange={(e) => handleTaskCheckboxChange(e, task.id)} />
+                                <input type='text' placeholder='Enter Task Title'  />
+                                <img src={deleteIcon} alt='delete' style={{ float: "right" }} onClick={() => handleTaskRemove(task.id)} />
+                            </div>
+                        ))}
+                    </div>
+                    <input type='date' placeholder='select date'></input>
+                    <button className={styles.prioBtn}>Cancel</button>
+                    <button className={styles.prioBtn}>Save</button>
+                </form>
+            </div>
         </div>
-    </div>
-  )
+    );
 }
 
-export default AddTask
+export default AddTask;

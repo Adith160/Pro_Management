@@ -15,8 +15,8 @@ function TaskCard(props) {
     <div className={styles.taskCardDiv}>
         <div className={styles.topSection}>
           {props.priority==='Low'? (<span><img src={greenIcon} alt='green'></img> LOW PRIORITY</span>)
-        :  props.priority==='High'? (<span><img src={blueIcon} alt='green'></img> MODERATE PRIORITY</span>) 
-        : (<span><img src={redIcon} alt='green'></img> HIGH PRIORITY</span>)
+        :  props.priority==='High'? (<span><img src={blueIcon} alt='blue'></img> MODERATE PRIORITY</span>) 
+        : (<span><img src={redIcon} alt='red'></img> HIGH PRIORITY</span>)
         }
           <div className={styles.customSelect}>
             <select className={styles.menuSelection}>
