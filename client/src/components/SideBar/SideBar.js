@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './SideBar.module.css';
+import Logout from '../PopUp/PopUp';
 import logo from '../../assets/icons/codesandbox.png'
 import analyticIcon from '../../assets/icons/database.png'
 import boardIcon from '../../assets/icons/layout.png'
@@ -7,17 +8,23 @@ import settingIcon from '../../assets/icons/settings.png'
 import logoutIcon from '../../assets/icons/Logout.png'
 import { useNavigate } from 'react-router-dom';
 
-function SideBar({toggleActivePage}, props) {
+function SideBar(props) {
+  const[showLogout, setShowLogout] = useState(false);
   const[Active, setActive] = useState(0);
   const navigate = useNavigate();
   const toggleLogout=()=>{
-    navigate("/register");
-    console.log("haii")
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    navigate("/login");
   }
 
   const toggleNavigate=(page)=>{
     setActive(page);
-  toggleActivePage(page);
+  props.toggleActivePage(page);
+}
+
+const handleShowLogout=(e)=>{
+  setShowLogout(!showLogout)
 }
 
   return (
@@ -36,7 +43,9 @@ function SideBar({toggleActivePage}, props) {
           </li>
         </ul>
       </div>
-      <button className={styles.logOut} onClick={toggleLogout}><img src={logoutIcon} alt='logo' style={{marginRight:'15%', width:'19%'}} />Log out</button>
+      <button className={styles.logOut} onClick={handleShowLogout}><img src={logoutIcon} alt='logo' style={{marginRight:'15%', width:'19%'}} />Log out</button>
+      
+      {showLogout && <Logout handleShowLogout={handleShowLogout} toggleLogout={toggleLogout} type={'logout'}/>}
     </div>
   );
 }

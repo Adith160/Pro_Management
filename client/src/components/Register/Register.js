@@ -42,7 +42,6 @@ function Register() {
 
     // Validate form fields
     const newErrors = {};
-
     if (userData.name.trim() === '') {
       newErrors.name = 'Field Is Required';
     }
@@ -55,7 +54,7 @@ function Register() {
       newErrors.email = 'Field Is Required';
     }
 
-    if (userData.phone.trim() === '') {
+    if (userData.password2.trim() === '') {
       newErrors.password2 = 'Field Is Required';
     }
 
@@ -71,7 +70,7 @@ function Register() {
       });
     };
 
-    if ((Object.keys(newErrors).length === 0) && (userData.check===true)){
+    if (Object.keys(newErrors).length === 0){
      
       const response = await registerUser({ ...userData });
       if(response){

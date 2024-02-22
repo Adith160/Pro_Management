@@ -37,7 +37,7 @@ function Login() {
 
     // Validate form fields
     const newErrors = {};
-
+debugger;
     if (userData.password.trim() === '') {
       newErrors.password = 'Field Is Required';
     }
@@ -56,14 +56,14 @@ function Login() {
       });
     };
 
-    if ((Object.keys(newErrors).length === 0) && (userData.check===true)){
+    if (Object.keys(newErrors).length === 0){
      
       const response = await loginUser({ ...userData });
       if(response){
         localStorage.setItem("token", response.token);
         localStorage.setItem("name", response.name)
         resetForm();
-        redirectToRegister();
+        navigate("/dashboard")
       }
     }
   }
@@ -101,7 +101,7 @@ function Login() {
         <button className={styles.submitBtn} type='submit'>Login</button>
       </form>
       <span className={styles.span3}>Have no account yet?</span>
-      <button className={styles.loginBtn} type='submit' onClick={redirectToRegister}>Register</button>
+      <button className={styles.loginBtn} onClick={redirectToRegister}>Register</button>
           </div>
        </div>  
        

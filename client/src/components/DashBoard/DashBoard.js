@@ -74,7 +74,7 @@ function DashBoard() {
             </div>
         </div>
       {showAddTask && <AddTask handleShowAddTask={handleShowAddTask}/>}
-    </div>
+     </div>
   );
 }
 

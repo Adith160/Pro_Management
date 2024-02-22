@@ -9,5 +9,6 @@ router.delete('/delete/:task_id', verifyAuth, taskController.deleteTask);
 router.put('/edit/:task_id', verifyAuth, taskController.editTask);
 router.get('/getAllTask/:taskId?', verifyAuth, taskController.getAllTasks);
 router.get('/tasksByWeek/:week', verifyAuth, taskController.getTasksByWeek);
+router.get('/taskSummary', verifyAuth, taskController.getTaskStatistics );
 
 module.exports = router;
