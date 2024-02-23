@@ -12,6 +12,7 @@ function SideBar(props) {
   const[showLogout, setShowLogout] = useState(false);
   const[Active, setActive] = useState(0);
   const navigate = useNavigate();
+  
   const toggleLogout=()=>{
     localStorage.removeItem("token");
     localStorage.removeItem("name");

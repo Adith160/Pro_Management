@@ -124,35 +124,34 @@ exports.taskController = {
         }
     },
 
-    getTaskStatistics : async (req, res) => {
+    //get task anlytics
+    getTaskStatistics: async (req, res) => {
         try {
-            // Fetch the counts for different task statuses
-            const backlogCount = await Task.countDocuments({ status: 'BackLog' });
-            const progressCount = await Task.countDocuments({ status: 'InProgress' });
-            const todoCount = await Task.countDocuments({ status: 'ToDo' });
-            const completedCount = await Task.countDocuments({ status: 'Done' });
-    
-            // Fetch the counts for different task priorities
-            const lowPriorityCount = await Task.countDocuments({ priority: 'Low' });
-            const moderatePriorityCount = await Task.countDocuments({ priority: 'Moderate' });
-            const highPriorityCount = await Task.countDocuments({ priority: 'High' });
-    
-            // Calculate the overall sum of tasks
-            const overallSum = backlogCount + progressCount + todoCount + completedCount;
-    
-            // Prepare response object
+           
+            const userId = req.user.id; 
+
+             const backlogCount = await Task.countDocuments({ status: 'BackLog', userRefId: userId });
+            const progressCount = await Task.countDocuments({ status: 'InProgress', userRefId: userId });
+            const todoCount = await Task.countDocuments({ status: 'ToDo', userRefId: userId });
+            const completedCount = await Task.countDocuments({ status: 'Done', userRefId: userId });
+
+             const lowPriorityCount = await Task.countDocuments({ priority: 'Low', userRefId: userId });
+            const moderatePriorityCount = await Task.countDocuments({ priority: 'Moderate', userRefId: userId });
+            const highPriorityCount = await Task.countDocuments({ priority: 'High', userRefId: userId });
+
+            const dueDateTasksCount = await Task.countDocuments({ dueDate: { $exists: true, $ne: null }, userRefId: userId });
+
             const statistics = {
-                overallSum: overallSum,
                 backlogCount: backlogCount,
                 progressCount: progressCount,
                 todoCount: todoCount,
                 completedCount: completedCount,
                 lowPriorityCount: lowPriorityCount,
                 moderatePriorityCount: moderatePriorityCount,
-                highPriorityCount: highPriorityCount
+                highPriorityCount: highPriorityCount,
+                dueDateTasksCount: dueDateTasksCount 
             };
-    
-            // Send response with the statistics
+
             res.status(200).json({ statistics, success: true });
         } catch (error) {
             console.error(error);

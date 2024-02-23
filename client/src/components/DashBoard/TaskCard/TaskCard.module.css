@@ -39,6 +39,7 @@
     width: 120%;
     border: none;
     outline: none; 
+    cursor: pointer;
   }
   
   .menuSelection option {
@@ -101,7 +102,7 @@
   background-color: rgb(242, 248, 248);
   color: black;
   border-radius: 1.5vh;
-  width: 16%;
+  width: 46%;
   right: 0;
   margin-right: 2%;
   position: fixed;

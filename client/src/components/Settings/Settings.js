@@ -2,20 +2,21 @@ import React, { useState } from 'react'
 import styles from './Settings.module.css'
 import {updateUser} from '../../api/auth'
 import viewIcon from '../../assets/icons/view.png'
+import { useNavigate } from 'react-router-dom';
 
 function Settings() {
   const [userData, setUserData] = useState({
     name: '',
-    password: '',
-    password2: '',
+    oldPassword: '',
+    newPassword: '',
   });
 
   const [errors, setErrors] = useState({
     name: '',
-    password: '', 
-    password2: '',
+    oldPassword: '', 
+    newPassword: '',
   })
-
+  const navigate= useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const handleOnChange=(e)=>{
     const { name, value } = e.target;
@@ -26,7 +27,7 @@ function Settings() {
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: '', // Clear the error when the user makes a change
+      [name]: '', 
     }));
   }
   const handleUserSubmit = async (e) => {
@@ -39,16 +40,12 @@ function Settings() {
       newErrors.name = 'Field Is Required';
     }
 
-    if (userData.password.trim() === '') {
-      newErrors.password = 'Field Is Required';
+    if (userData.oldPassword.trim() === '') {
+      newErrors.oldPassword = 'Field Is Required';
     }
 
-    if (userData.email.trim() === '') {
-      newErrors.email = 'Field Is Required';
-    }
-
-    if (userData.phone.trim() === '') {
-      newErrors.password2 = 'Field Is Required';
+    if (userData.newPassword.trim() === '') {
+      newErrors.newPassword = 'Field Is Required';
     }
 
     // Update the errors state
@@ -57,19 +54,19 @@ function Settings() {
     const resetForm = () => {
       setUserData({
         name: '',
-        email: '',
-        password: '',
-        password2:'',
+        oldPassword: '',
+        newPassword:'',
       });
     };
 
-    if ((Object.keys(newErrors).length === 0) && (userData.check===true)){
-     
+    if (Object.keys(newErrors).length === 0){
+     debugger;
       const response = await updateUser({ ...userData });
       if(response){
         localStorage.setItem("token", response.token);
         localStorage.setItem("name", response.name)
         resetForm();
+        navigate('/login');
       }
     }
   }
@@ -85,12 +82,12 @@ function Settings() {
           <h2>Settings</h2>
         <input name='name' placeholder='Name' type='text' value={userData.name} onChange={handleOnChange}   className={styles.nameIcon}></input>
         {errors.name && <div className={styles.errorText}>{errors.name}</div>}
-        <input name='password' placeholder='Password' type={showPassword ? 'text' : 'password'} value={userData.password} onChange={handleOnChange} className={styles.lockIcon}></input>
+        <input name='oldPassword' placeholder='Old Password' type={showPassword ? 'text' : 'password'} value={userData.oldPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
         <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
-        {errors.password && <div className={styles.errorText}>{errors.password}</div>}
-        <input name='password2' placeholder='Confirm Password' type='password' value={userData.password2} onChange={handleOnChange} className={styles.lockIcon}></input>
+        {errors.oldPassword && <div className={styles.errorText}>{errors.oldPassword}</div>}
+        <input name='newPassword' placeholder='New Password' type='password' value={userData.newPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
         <img src={viewIcon} alt='view' className={styles.view2} onClick={togglePasswordVisibility }/>
-        {errors.password2 && <div className={styles.errorText}>{errors.password2}</div>}
+        {errors.newPassword && <div className={styles.errorText}>{errors.newPassword}</div>}
         <button className={styles.submitBtn} type='submit'>Update</button>
       </form>
           </div>

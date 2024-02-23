@@ -30,13 +30,17 @@ export const loginUser = async ({ email, password }) => {
     }
 };
 
-export const updateUser = async ({ name, password }) => {
+export const updateUser = async ({ name, oldPassword, newPassword }) => {
     try {
+        debugger;
         const reqUrl = `${backendUrl}/auth/v1/update`;
-        const reqPayload = { name, password };
+        const reqPayload = { name, oldPassword, newPassword};
+        const token = localStorage.getItem("token");
+        if (token) {
+          axios.defaults.headers.common["Authorization"] = token;
+         }
         const response = await axios.put(reqUrl, reqPayload);
-        
-       
+
         if (response.status === 201) {
             return response.data;
         } else {
