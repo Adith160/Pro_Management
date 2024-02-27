@@ -12,7 +12,7 @@ router.post('/register', async (req,res)=>{
         const validationResult = authValidation.validate(req.body);
 
         if(validationResult.error){
-            return res.status(400).json({ error: validationResult.error.message, success: false,})
+            return res.status(400).json({ message: validationResult.error.message, success: false,})
         }
 
         const emailCheck = await User.findOne({ email:email })
@@ -34,17 +34,16 @@ router.post('/register', async (req,res)=>{
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ errorMessage: "Internal Server Error" ,success: false,});
+        res.status(500).json({ error: "Internal Server Error" ,success: false,});
     }
 })
 
 router.post('/login', async(req,res)=>{
     try {
     const {email, password} = req.body;
-
     if(!email, !password){
         return res.status(409).json({
-            error:"Invalid Credentials",
+            mesaage:"Invalid Credentials",
             success: false,
         })
     }
@@ -73,8 +72,7 @@ router.post('/login', async(req,res)=>{
     })
 
      } catch (error) {
-        console.error(error);
-        res.status(500).json({ errorMessage: "Internal Server Error" ,success: false,});
+        res.status(500).json({ error: "Internal Server Error" ,success: false,});
     }
 })
 
@@ -84,7 +82,7 @@ router.put('/update', verifyAuth, async (req, res) => {
         const userId = req.user.id; 
         
         if (!newPassword || !oldPassword) {
-            return res.status(400).json({ error: "Invalid Passwords", success: false });
+            return res.status(400).json({ message: "Invalid Passwords", success: false });
         }
 
         const user = await User.findById(userId);
@@ -95,7 +93,7 @@ router.put('/update', verifyAuth, async (req, res) => {
 
         const passwordMatch = await bcrypt.compare(oldPassword, user.password);
         if (!passwordMatch) {
-            return res.status(400).json({ error: "Wrong Password", success: false });
+            return res.status(400).json({ message: "Wrong Password", success: false });
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -108,7 +106,7 @@ router.put('/update', verifyAuth, async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ errorMessage: "Internal Server Error", success: false });
+        res.status(500).json({ error: "Internal Server Error", success: false });
     }
 });
 

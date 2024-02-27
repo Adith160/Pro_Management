@@ -9,30 +9,37 @@ export const registerUser = async ({name,email,password}) => {
         const response = await axios.post(reqUrl, reqPayload)
         return response.data;
     } catch (error) {
-         toast.error('Invalid request!');
+        if(error.response.data.message){
+            toast.error(error.response.data.message);
+        }else{
+            toast.error('Invalid request!');
+        }
     }
 };
 
 export const loginUser = async ({ email, password }) => {
     try {
+        debugger;
         const reqUrl = `${backendUrl}/auth/v1/login`;
         const reqPayload = { email, password };
         const response = await axios.post(reqUrl, reqPayload);
         
        
-        if (response.status === 201) {
+        if (response.status === 201) 
+
             return response.data;
-        } else {
-            toast.error('Invalid login credentials!');
-        }
+        
     } catch (error) {
-        toast.error('Invalid request!');
+        if(error.response.data.message){
+            toast.error(error.response.data.message);
+        }else{
+            toast.error('Invalid request!');
+        }
     }
 };
 
 export const updateUser = async ({ name, oldPassword, newPassword }) => {
     try {
-        debugger;
         const reqUrl = `${backendUrl}/auth/v1/update`;
         const reqPayload = { name, oldPassword, newPassword};
         const token = localStorage.getItem("token");
@@ -40,13 +47,16 @@ export const updateUser = async ({ name, oldPassword, newPassword }) => {
           axios.defaults.headers.common["Authorization"] = token;
          }
         const response = await axios.put(reqUrl, reqPayload);
-
         if (response.status === 201) {
             return response.data;
         } else {
             toast.error('Invalid login credentials!');
         }
     } catch (error) {
-        toast.error('Invalid request!');
+        if(error.response.data.message){
+            toast.error(error.response.data.message);
+        }else{
+            toast.error('Invalid request!');
+        }
     }
 };

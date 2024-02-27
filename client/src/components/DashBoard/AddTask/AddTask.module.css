@@ -3,7 +3,7 @@
     width: 100vw;
     left: 0;
     position: fixed;
-    background-color: rgba(181, 193, 199, 0.502);
+    background-color: #b5c1c780;
     z-index: 2;
     display: flex;
     justify-content: center;
@@ -11,7 +11,7 @@
 }
 
 .addDiv{
-    height: 60%;
+    height: 70%;
     width: 45%;
     border-radius: 2vh;
     background-color: white;
@@ -19,11 +19,6 @@
     justify-content: center;
 }
 
-.addDiv label{
-    width: 94%;
-    height: 4vh;
-    border-radius: 1vh;
-}
 
 .mailIcon{
     width: 94%;
@@ -36,6 +31,7 @@
     width: 88%;
     height: 50%;
     margin: 5% 0% 0% 6%;
+    position: relative;
 }
 
 .addDiv form span{
@@ -49,20 +45,25 @@
     color: red;
 }
 
-.addDiv label{
+.pLabel{
     font-size: 0.9rem;
     font-weight: 600;
+    width: 94%;
+    height: 4vh;
+    border-radius: 1vh;
 }
 
 .prioBtn{
-    width: 23%;
-    height: 3.6vh;
-    font-size: xx-small;
+    width: 22.5%;
+    height: 3.2vh;
+    font-size: x-small;
     background: none;
     border: 1px solid #b5c1c780;
     border-radius: 1vh;
     margin: 2% 0% 4% 2%;
     cursor: pointer;
+    display: inline-block;
+    text-align: center;
 }
 
 .prioBtn img{
@@ -79,17 +80,48 @@
 
 .addedTasks {
     width: 90%;
-    height: 18vh; /* Set a fixed height for the container */
-    overflow-y: auto; /* Enable vertical scroll when content overflows */
+    height:20vh; 
+    overflow-y: auto; 
     overflow-x: hidden;
+    margin-bottom: 4vh;
 }
 
 .addedTasks label {
     display: block;
 }
 
+.taskItem{
+    width: 100%;
+}
 
+.taskTitle{
+    width: 90%;
+    border: 1px solid #b5c1c780;
+    border-radius: 1vh;
+    height: 4vh;
+    margin-bottom: 1vh;
+}
 
+.bottomBtn{
+    width: 120%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
 
+.datePickerWrapper{
+    position: absolute;
+    top: 0;
+    right: 3;
+}
 
-
+.dateInput{
+    border: 1px solid #b5c1c780;
+    border-radius: 1vh;
+    font-size: 0.9rem;
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+    color: #0d0d0ebe;
+}

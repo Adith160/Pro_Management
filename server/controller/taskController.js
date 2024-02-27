@@ -6,11 +6,13 @@ exports.taskController = {
     // Create a new task
     createTask: async (req, res) => {
         try {
-            const taskValidationRes = taskValidation.validate(req.body);
+            const user = req.user.id;
+            const request = { ...req.body , userRefId : user}
+            const taskValidationRes = taskValidation.validate(request);
             if (taskValidationRes.error) {
                 return res.status(400).json({ error: taskValidationRes.error.message, success: false });
             }
-            const newTask = new Task(req.body);
+            const newTask = new Task(request);
             await newTask.save();
 
             res.status(201).json({ message: "Task Saved Successfully", success: true });
@@ -23,7 +25,9 @@ exports.taskController = {
     //Router for edit task
     editTask : async (req, res) => {
         try {
-            const taskValidationRes = taskValidation.validate(req.body);
+            const user = req.user.id;
+            const request = { ...req.body , userRefId : user}
+            const taskValidationRes = taskValidation.validate(request);
             if (taskValidationRes.error) {
                 return res.status(400).json({ error: taskValidationRes.error.message, success: false });
             }
@@ -31,13 +35,13 @@ exports.taskController = {
             if (!taskId) {
                 return res.status(409).json({ message: "Parameter missing", success: false });
             }
-            const newTask = req.body;
+            const newTask = request;
             const updateStatus = await Task.updateOne({ _id: taskId }, { $set: newTask });
             if (!updateStatus) {
                 return res.status(409).json({ message: "Job Id Not Found", success: false });
             }
     
-            res.status(201).json({ message: "Task Saved Successfully", success: true });
+            res.status(201).json({ message: "Task Edited Successfully", success: true });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error', success: false });
@@ -84,6 +88,26 @@ exports.taskController = {
         }
     },
 
+    // Get tasks by status 
+    getTaskByStatus: async (req, res) => {
+        try {
+            if (req.params.status) {
+                const status = req.params.status;
+                const tasks = await Task.find({ status: status });
+                if (!tasks || tasks.length === 0) {
+                    return res.status(404).json({ message: "No tasks found with status: " + status, success: false });
+                }
+                res.status(200).json({ tasks, success: true });
+            } else {
+                const tasks = await Task.find();
+                res.status(200).json({ tasks, success: true });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error', success: false });
+        }
+    },
+    
+
     // Get tasks by week
     getTasksByWeek: async (req, res) => {
         try {
@@ -104,7 +128,7 @@ exports.taskController = {
                 startOfWeek = moment().add(1, 'week').startOf('week');
                 endOfWeek = moment().add(1, 'week').endOf('week');
             } else {
-                return res.status(400).json({ error: 'Invalid week parameter', success: false });
+                return res.status(400).json({ message: 'Invalid week parameter', success: false });
             }
 
             startOfWeek.utc();

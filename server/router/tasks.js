@@ -10,5 +10,6 @@ router.put('/edit/:task_id', verifyAuth, taskController.editTask);
 router.get('/getAllTask/:taskId?', verifyAuth, taskController.getAllTasks);
 router.get('/tasksByWeek/:week', verifyAuth, taskController.getTasksByWeek);
 router.get('/taskSummary', verifyAuth, taskController.getTaskStatistics );
+router.get('/getTaskByStatus/:status?', verifyAuth, taskController.getTaskByStatus);
 
 module.exports = router;

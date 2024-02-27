@@ -34,10 +34,8 @@ function Login() {
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
-
     // Validate form fields
     const newErrors = {};
-debugger;
     if (userData.password.trim() === '') {
       newErrors.password = 'Field Is Required';
     }
@@ -57,7 +55,6 @@ debugger;
     };
 
     if (Object.keys(newErrors).length === 0){
-     
       const response = await loginUser({ ...userData });
       if(response){
         localStorage.setItem("token", response.token);

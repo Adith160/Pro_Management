@@ -18,6 +18,7 @@ function Settings() {
   })
   const navigate= useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
   const handleOnChange=(e)=>{
     const { name, value } = e.target;
     setUserData((prevData) => ({
@@ -60,7 +61,6 @@ function Settings() {
     };
 
     if (Object.keys(newErrors).length === 0){
-     debugger;
       const response = await updateUser({ ...userData });
       if(response){
         localStorage.setItem("token", response.token);
@@ -74,6 +74,10 @@ function Settings() {
   const togglePasswordVisibility  = (e) => {
     setShowPassword(!showPassword);
   };
+
+  const togglePasswordVisibility2  = (e) => {
+    setShowPassword2(!showPassword2);
+  };
   return (
     <>
     <div className={styles.mainContainer}>
@@ -85,8 +89,8 @@ function Settings() {
         <input name='oldPassword' placeholder='Old Password' type={showPassword ? 'text' : 'password'} value={userData.oldPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
         <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
         {errors.oldPassword && <div className={styles.errorText}>{errors.oldPassword}</div>}
-        <input name='newPassword' placeholder='New Password' type='password' value={userData.newPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
-        <img src={viewIcon} alt='view' className={styles.view2} onClick={togglePasswordVisibility }/>
+        <input name='newPassword' placeholder='New Password' type={showPassword2 ? 'text' : 'password'} value={userData.newPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
+        <img src={viewIcon} alt='view' className={styles.view2} onClick={togglePasswordVisibility2 }/>
         {errors.newPassword && <div className={styles.errorText}>{errors.newPassword}</div>}
         <button className={styles.submitBtn} type='submit'>Update</button>
       </form>
