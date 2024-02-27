@@ -9,7 +9,7 @@ import downIcon from '../../../assets/icons/DownArrow.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function TaskCard(props) {
+function TaskCard({ task }) {
   const [showDelete, setShowDelete] = useState(false);
   const [Menu, showMenu] = useState(false);
 
@@ -42,11 +42,22 @@ function TaskCard(props) {
     //
   };
 
+  // Check if task is undefined or null
+  if (!task) {
+    return null; // or return a placeholder indicating that no task is available
+  }
+
+  // Destructure task properties or provide defaults if they are missing
+  const { title = '', priority = '', checklistItems = [], totalChecklistItems = 0, dueDate = '' } = task;
+
+  // Format the due date to 'Feb 10th' format
+  const formattedDueDate = new Date(dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
   return (
     <div className={styles.taskCardDiv}>
       <div className={styles.topSection}>
-        {props.priority === 'Low' ? (<span><img src={greenIcon} alt='green'></img> LOW PRIORITY</span>)
-          : props.priority === 'High' ? (<span><img src={blueIcon} alt='blue'></img> MODERATE PRIORITY</span>)
+        {priority === 'Low' ? (<span><img src={greenIcon} alt='green'></img> LOW PRIORITY</span>)
+          : priority === 'Moderate' ? (<span><img src={blueIcon} alt='blue'></img> MODERATE PRIORITY</span>)
             : (<span><img src={redIcon} alt='red'></img> HIGH PRIORITY</span>)
         }
         <div className={styles.customSelect}>
@@ -61,10 +72,10 @@ function TaskCard(props) {
 
       <div className={styles.menuDiv}></div>
 
-      <span className={styles.title}>Hero Section</span>
+      <span className={styles.title}>{title}</span>
 
       <div className={styles.topSection}>
-        <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>Checklist (0/3) </span>
+        <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>Checklist ({checklistItems.length}/{totalChecklistItems}) </span>
         {!Menu ?
           (<img src={downIcon} alt='down' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />)
           : <img src={upIcon} alt='up' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />}
@@ -72,15 +83,22 @@ function TaskCard(props) {
 
       {Menu &&
         <div className={styles.checklist}>
-          <label htmlFor="myCheckbox"><input type='checkbox' value='hah' />This is my checkbox</label>
+          {checklistItems.map((item, index) => (
+            <div key={index} className={styles.checklistItem}>
+              <label htmlFor={`checkbox-${index}`}>
+                <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} /> {item.checklist} - {item.type}
+              </label>
+            </div>
+          ))}
         </div>}
 
       <div className={styles.bottomSection}>
-        <button className={styles.dateBtn} style={{ width: "23%", backgroundColor: props.priority === 'High' ? 'red' : '' }}>Feb 10th</button>
+        <button className={styles.Btn} style={{ width: "23%", backgroundColor: priority === 'High' ? 'red' : '' }}>{formattedDueDate}</button>
         <div className={styles.taskBtn}>
-          <button className={styles.dateBtn}>BACKLOG</button>
-          <button className={styles.dateBtn}>TO-DO</button>
-          <button className={styles.dateBtn}>DONE</button>
+          <button className={styles.Btn} style={{ cursor: "pointer"}}>Backlog</button>
+          <button className={styles.Btn}>To-Do</button>
+          <button className={styles.Btn}>Progress</button>
+          <button className={styles.Btn}>Done</button>
         </div>
       </div>
 

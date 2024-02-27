@@ -69,7 +69,7 @@ exports.taskController = {
     },
 
     // Get all tasks or a specific task by ID
-    getAllTasks: async (req, res) => {
+    getTaskById: async (req, res) => {
         try {
             if (req.params.taskId) {
                 const taskId = req.params.taskId;
@@ -109,45 +109,55 @@ exports.taskController = {
     
 
     // Get tasks by week
-    getTasksByWeek: async (req, res) => {
+    getAllTasksByWeek: async (req, res) => {
         try {
-            const { week } = req.params;
-            let startOfWeek, endOfWeek;
-
-            const today = moment().startOf('day');
-            const startOfCurrentWeek = moment().startOf('week');
-            const endOfCurrentWeek = moment().endOf('week');
-
-            if (week === 'this') {
-                startOfWeek = startOfCurrentWeek;
-                endOfWeek = endOfCurrentWeek;
-            } else if (week === 'prev') {
-                startOfWeek = moment().subtract(1, 'week').startOf('week');
-                endOfWeek = moment().subtract(1, 'week').endOf('week');
-            } else if (week === 'next') {
-                startOfWeek = moment().add(1, 'week').startOf('week');
-                endOfWeek = moment().add(1, 'week').endOf('week');
+            const { period, status } = req.params; // Assuming userId is also passed in params
+            const userId = req.user.id;  
+            let query = {};
+            let startDate, endDate;
+    
+            if (period === 'today') {
+                startDate = moment().startOf('day');
+                endDate = moment().endOf('day');
+            } else if (period === 'thisWeek') {
+                startDate = moment().startOf('week');
+                endDate = moment().endOf('week');
+            } else if (period === 'thisMonth') {
+                startDate = moment().startOf('month');
+                endDate = moment().endOf('month');
+            } else if (period === 'all') {
+               // nothing to do
             } else {
-                return res.status(400).json({ message: 'Invalid week parameter', success: false });
+                return res.status(400).json({ message: 'Invalid period parameter', success: false });
             }
-
-            startOfWeek.utc();
-            endOfWeek.utc();
-
-            const tasks = await Task.find({
-                dueDate: {
-                    $gte: startOfWeek.toDate(),
-                    $lte: endOfWeek.toDate()
-                }
-            });
-
+            
+            query.userRefId = userId;
+    
+            if(startDate){
+                startDate.utc();
+                endDate.utc();
+            }
+            
+            if (status) {
+                query.status = status;
+            }
+    
+            if (period !== 'all') {
+                query.dueDate = {
+                    $gte: startDate.toDate(),
+                    $lte: endDate.toDate()
+                };
+            }
+    
+            const tasks = await Task.find(query);
+    
             res.status(200).json({ tasks, success: true });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error', success: false });
         }
     },
-
+    
     //get task anlytics
     getTaskStatistics: async (req, res) => {
         try {
