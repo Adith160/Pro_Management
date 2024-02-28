@@ -70,6 +70,7 @@
     width: 100%;
     border-radius: 1vh;
     margin-top: 3%;
+    display: flex;
 }
 
 .bottomSection{
@@ -102,9 +103,8 @@
   background-color: rgb(242, 248, 248);
   color: black;
   border-radius: 1.5vh;
-  width: 46%;
+  width: 66%;
   right: 0;
-  margin-right: 2%;
   position: fixed;
 }
 

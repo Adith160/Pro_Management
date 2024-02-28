@@ -57,6 +57,12 @@
     height: 4%;
 }
 
+.errorText{
+    font-size: 0.7rem;
+    color: red;
+    margin-bottom: -1%;
+}
+
 .submitBtn{
     width: 115%;
     margin-top: 10%;

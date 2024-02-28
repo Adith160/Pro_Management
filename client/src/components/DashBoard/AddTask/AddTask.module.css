@@ -21,10 +21,12 @@
 
 
 .mailIcon{
-    width: 94%;
+    width: 93%;
     height: 4vh;
     border: 1px solid #b5c1c780;
     border-radius: 1vh;
+    font-size: 1rem;
+    padding: 1%;
 }
 
 .addDiv form{
@@ -66,6 +68,19 @@
     text-align: center;
 }
 
+.prioBtn1{
+    width: 22.5%;
+    height: 3.2vh;
+    font-size: small;
+    background: none;
+    border: 1px solid #b5c1c780;
+    border-radius: 1vh;
+    margin: 2% 0% 4% 2%;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
 .prioBtn img{
     margin-right: 5%;
 }
@@ -80,7 +95,7 @@
 
 .addedTasks {
     width: 90%;
-    height:20vh; 
+    height:21vh; 
     overflow-y: auto; 
     overflow-x: hidden;
     margin-bottom: 4vh;
@@ -92,6 +107,14 @@
 
 .taskItem{
     width: 100%;
+    border: 1px solid #b5c1c780;
+    margin-bottom: 1vh;
+    border-radius: 1vh;
+}
+
+.checklistTitle{
+    height: 5vh;
+    width: 85%;
 }
 
 .taskTitle{
@@ -102,12 +125,20 @@
     margin-bottom: 1vh;
 }
 
+.checklistTitle{
+    border: none;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none; 
+  }
+
 .bottomBtn{
     width: 120%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
 }
 
 .datePickerWrapper{

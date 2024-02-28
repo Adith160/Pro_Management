@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import PopUp from '../../PopUp/PopUp';
+import { deleteTask } from '../../../api/taskApi';
 import greenIcon from '../../../assets/icons/GreenEllipse.png';
 import redIcon from '../../../assets/icons/RedEllipse.png';
 import blueIcon from '../../../assets/icons/BlueEllipse.png';
@@ -9,10 +10,9 @@ import downIcon from '../../../assets/icons/DownArrow.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function TaskCard({ task }) {
+function TaskCard({ task, setMenu, handleStatusUpdate, refreshData }) {
   const [showDelete, setShowDelete] = useState(false);
   const [Menu, showMenu] = useState(false);
-
   const handleShowMenu = () => {
     showMenu(!Menu);
   };
@@ -22,7 +22,8 @@ function TaskCard({ task }) {
       setShowDelete(true);
       e.target.value = ""
     } else if (e.target.value === "option2") {
-      toast.dark("Link Copied", {
+      // Share functionality
+      toast.success("Link Copied", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: true,
@@ -38,20 +39,27 @@ function TaskCard({ task }) {
     }
   };
 
-  const toggleDelete = () => {
-    //
-  };
-
-  // Check if task is undefined or null
   if (!task) {
-    return null; // or return a placeholder indicating that no task is available
+    return null;
   }
 
-  // Destructure task properties or provide defaults if they are missing
-  const { title = '', priority = '', checklistItems = [], totalChecklistItems = 0, dueDate = '' } = task;
+  const { _id='', title = '', priority = '', checklists = [], dueDate = '', status = '' } = task;
 
-  // Format the due date to 'Feb 10th' format
-  const formattedDueDate = new Date(dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const toggleDelete = async() => {
+    debugger;
+    const res = await deleteTask(_id);
+    if(res){
+      toast.success("Task deleted successfully")
+    }
+    setShowDelete(false);
+    refreshData();
+  };
+
+  const formattedDueDate = new Date(dueDate);
+  const today = new Date();
+
+  // Check if due date is in the future and task is not done
+  const isDueDateFutureAndNotDone = formattedDueDate < today && status !== 'Done';
 
   return (
     <div className={styles.taskCardDiv}>
@@ -72,35 +80,48 @@ function TaskCard({ task }) {
 
       <div className={styles.menuDiv}></div>
 
-      <span className={styles.title}>{title}</span>
+      {/* Truncate long title and show full title in tooltip */}
+      <span className={`${styles.title} ${title.length > 20 ? styles.truncated : ''}`} title={title}>
+        {title.length > 20 ? title.slice(0, 20) + '...' : title}
+      </span>
 
       <div className={styles.topSection}>
-        <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>Checklist ({checklistItems.length}/{totalChecklistItems}) </span>
-        {!Menu ?
-          (<img src={downIcon} alt='down' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />)
-          : <img src={upIcon} alt='up' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />}
-      </div>
+  <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>Checklist ({checklists.filter(item => item.type === '1').length}/{checklists.length})</span>
+  
+  {!Menu ?
+    (<img src={downIcon} alt='down' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />)
+    : <img src={upIcon} alt='up' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />}
+</div>
 
-      {Menu &&
-        <div className={styles.checklist}>
-          {checklistItems.map((item, index) => (
-            <div key={index} className={styles.checklistItem}>
-              <label htmlFor={`checkbox-${index}`}>
-                <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} /> {item.checklist} - {item.type}
-              </label>
-            </div>
-          ))}
-        </div>}
+{Menu &&
+ <div className={styles.checklist}>
+  {checklists.map((item, index) => (
+    <div key={index} className={styles.checklistItem}>
+      <label htmlFor={`checkbox-${index}`} className={item.checklist.length > 5 ? styles.multiLine : ''}>
+        <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} checked={item.type === '1'} /> 
+        {item.checklist}
+      </label>
+    </div>
+  ))}
+</div>
 
-      <div className={styles.bottomSection}>
-        <button className={styles.Btn} style={{ width: "23%", backgroundColor: priority === 'High' ? 'red' : '' }}>{formattedDueDate}</button>
-        <div className={styles.taskBtn}>
-          <button className={styles.Btn} style={{ cursor: "pointer"}}>Backlog</button>
-          <button className={styles.Btn}>To-Do</button>
-          <button className={styles.Btn}>Progress</button>
-          <button className={styles.Btn}>Done</button>
-        </div>
-      </div>
+}
+
+<div className={styles.bottomSection}>
+  {dueDate ? (
+    <button className={styles.Btn} style={{ width: "23%", cursor:"default", backgroundColor: status ==='Done'? '#63C05B': isDueDateFutureAndNotDone ? '#CF3636' : '', color: status ==='Done'? 'white': isDueDateFutureAndNotDone ? 'white' : 'black' }}>
+      {formattedDueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+    </button>
+  ): <div></div>}
+
+  <div className={styles.taskBtn}>
+    <button className={styles.Btn} onClick={()=>handleStatusUpdate('BackLog', _id)}>Backlog</button>
+    <button className={styles.Btn} onClick={()=>handleStatusUpdate('ToDo', _id)}>To-Do</button>
+    <button className={styles.Btn} onClick={()=>handleStatusUpdate('InProgress', _id)}>Progress</button>
+    <button className={styles.Btn} onClick={()=>handleStatusUpdate('Done', _id)}>Done</button>
+  </div>
+</div>
+
 
       {showDelete && <PopUp setShowDelete={setShowDelete} toggleLogout={toggleDelete} type={'delete'} />}
     </div>

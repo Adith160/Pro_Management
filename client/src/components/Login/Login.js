@@ -1,25 +1,25 @@
-import React, { useState }  from 'react'
-import styles from './Login.module.css'
-import logoArt from '../../assets/images/Art.png'
-import { useNavigate } from 'react-router-dom';
-import {loginUser} from '../../api/auth'
-import viewIcon from '../../assets/icons/view.png'
+import React, { useState } from "react";
+import styles from "./Login.module.css";
+import logoArt from "../../assets/images/Art.png";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../api/auth";
+import viewIcon from "../../assets/icons/view.png";
 
 function Login() {
   const [userData, setUserData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({
-    email: '',
-    password: '', 
-  })
+    email: "",
+    password: "",
+  });
 
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const handleOnChange=(e)=>{
+  const handleOnChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({
       ...prevData,
@@ -28,20 +28,20 @@ function Login() {
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: '', // Clear the error when the user makes a change
+      [name]: "", // Clear the error when the user makes a change
     }));
-  }
+  };
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     // Validate form fields
     const newErrors = {};
-    if (userData.password.trim() === '') {
-      newErrors.password = 'Field Is Required';
+    if (userData.password.trim() === "") {
+      newErrors.password = "Field Is Required";
     }
 
-    if (userData.email.trim() === '') {
-      newErrors.email = 'Field Is Required';
+    if (userData.email.trim() === "") {
+      newErrors.email = "Field Is Required";
     }
 
     // Update the errors state
@@ -49,25 +49,25 @@ function Login() {
 
     const resetForm = () => {
       setUserData({
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       });
     };
 
-    if (Object.keys(newErrors).length === 0){
+    if (Object.keys(newErrors).length === 0) {
       const response = await loginUser({ ...userData });
-      if(response){
+      if (response) {
         localStorage.setItem("token", response.token);
-        localStorage.setItem("name", response.name)
+        localStorage.setItem("name", response.name);
         resetForm();
-        navigate("/dashboard")
+        navigate("/dashboard");
       }
     }
-  }
+  };
 
-  const redirectToRegister = () =>{
+  const redirectToRegister = () => {
     navigate("/register");
-  }
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -75,37 +75,65 @@ function Login() {
   return (
     <div className={styles.loginPage}>
       <div className={styles.imageDiv}>
-        <img src={logoArt} alt='logo' width='50%' height='65%'/>
+        <img src={logoArt} alt="logo" width="50%" height="65%" />
         <div className={styles.texts}>
-          <span className={styles.span1}>Welcome aboard my friend </span> 
-          <span className={styles.span2}>just a couple of clicks and we start</span>
+          <span className={styles.span1}>Welcome aboard my friend </span>
+          <span className={styles.span2}>
+            just a couple of clicks and we start
+          </span>
         </div>
       </div>
 
       <div className={styles.loginDiv}>
         <div className={styles.mainDiv}>
           <div className={styles.titleDiv}>
-              <h3>Login</h3>
+            <h3>Login</h3>
           </div>
-     {/* form starts here */}
+          {/* form starts here */}
           <div className={styles.formDiv}>
-          <form  onSubmit={handleUserSubmit} autocomplete="off">
-        <input name='email' placeholder='Email' type='email' value={userData.email} onChange={handleOnChange}   className={styles.mailIcon}></input>
-        {errors.email && <div className={styles.errorText}>{errors.email}</div>}
-        <input name='password' placeholder='Password' type={showPassword ? 'text' : 'password'} value={userData.password} onChange={handleOnChange} className={styles.lockIcon}></input>
-        <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
-        {errors.password && <div className={styles.errorText}>{errors.password}</div>}
-        <button className={styles.submitBtn} type='submit'>Login</button>
-      </form>
-      <span className={styles.span3}>Have no account yet?</span>
-      <button className={styles.loginBtn} onClick={redirectToRegister}>Register</button>
+            <form onSubmit={handleUserSubmit} autocomplete="off">
+              <input
+                name="email"
+                placeholder="Email"
+                type="email"
+                value={userData.email}
+                onChange={handleOnChange}
+                className={styles.mailIcon}
+              ></input>
+              {errors.email && (
+                <div className={styles.errorText}>{errors.email}</div>
+              )}
+              <input
+                name="password"
+                placeholder="Password"
+                type={showPassword ? "text" : "password"}
+                value={userData.password}
+                onChange={handleOnChange}
+                className={styles.lockIcon}
+              ></input>
+              <img
+                src={viewIcon}
+                alt="view"
+                className={styles.view}
+                style={errors.email ? { top: "47%" } : {}}
+                onClick={togglePasswordVisibility}
+              />
+              {errors.password && (
+                <div className={styles.errorText}>{errors.password}</div>
+              )}
+              <button className={styles.submitBtn} type="submit">
+                Login
+              </button>
+            </form>
+            <span className={styles.span3}>Have no account yet?</span>
+            <button className={styles.loginBtn} onClick={redirectToRegister}>
+              Register
+            </button>
           </div>
-       </div>  
-       
-
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

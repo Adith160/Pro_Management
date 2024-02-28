@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './DashBoard.module.css';
-import { getAllTaskByWeek } from '../../api/taskApi';
+import { getAllTaskByWeek, updateTaskStatus } from '../../api/taskApi';
 import TaskCard from './TaskCard/TaskCard';
 import AddTask from './AddTask/AddTask';
 import collapseIcon from '../../assets/icons/codicon_collapse-all.png';
@@ -16,23 +16,22 @@ function DashBoard() {
   const [toDoData, setToDoData] = useState([]);
   const [inProgressData, setInProgressData] = useState([]);
   const [completedData, setCompletedData] = useState([]);
+  const [menu, setMenu] = useState(false);
 
   useEffect(() => {
-    // Fetch tasks based on the selected week when 'week' state changes
     fetchTasksByWeek(period);
   }, [period]); // Add 'week' as a dependency to useEffect
 
   const fetchTasksByWeek = async (selectedPeriod) => {
     try {
       // Call your API to get tasks based on the selected week for each status
-      const backlogTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'Backlog' });
+      const backlogTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'BackLog' });
       const todoTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'ToDo' });
       const inProgressTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'InProgress' });
       const doneTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'Done' });
       
       // Update state variables with fetched data for each status
       setBacklogData(backlogTasks.tasks);
-      debugger;
       setToDoData(todoTasks.tasks);
       setInProgressData(inProgressTasks.tasks);
       setCompletedData(doneTasks.tasks);
@@ -50,6 +49,27 @@ function DashBoard() {
     setPeriod(e.target.value);
   }
 
+  const handleSetMenu = () =>{
+    setMenu(false)
+  }
+
+  const handleStatusUpdate = async (value, taskId) => {
+    try {
+        await updateTaskStatus(value, taskId);
+        await fetchTasksByWeek(period);
+    } catch (error) {
+        console.error('Error updating task status:', error);
+    }
+}
+
+const refreshData =async () => {
+  try {
+    await fetchTasksByWeek('all');
+      await fetchTasksByWeek(period);
+  } catch (error) {
+      console.error("Refresh error", error);
+  }
+}
   return (
     <div className={styles.mainContainer}>
         <div className={styles.topDiv}>
@@ -75,7 +95,7 @@ function DashBoard() {
                 </div>
                 <div className={styles.taskRecords}>
                     {backlogData.map(task => (
-                        <TaskCard key={task.id} task={task} />
+                        <TaskCard key={task.id} task={task} setMenu={menu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
                     ))}
                 </div>
             </div>
@@ -85,12 +105,12 @@ function DashBoard() {
                   <span className={styles.headSpan2}>To do</span> 
                   <div>
                       <img src={addIcon} alt='collapse'style={{width:"35%", height:"40%", marginRight:"20%", cursor:"pointer"}} onClick={handleShowAddTask}/>
-                      <img src={collapseIcon} alt='collapse' style={{width:"40%", height:"60%",cursor:"pointer"}}/>
+                      <img src={collapseIcon} alt='collapse' style={{width:"40%", height:"60%",cursor:"pointer"}} onClick={handleSetMenu}/>
                   </div>
                 </div>
                 <div className={styles.taskRecords}>
                     {toDoData.map(task => (
-                        <TaskCard key={task.id} task={task} />
+                        <TaskCard key={task.id} task={task} setMenu={setMenu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
                     ))}
                 </div>
             </div>
@@ -102,7 +122,7 @@ function DashBoard() {
                 </div>
                 <div className={styles.taskRecords}>
                     {inProgressData.map(task => (
-                        <TaskCard key={task.id} task={task} />
+                       <TaskCard key={task.id} task={task} setMenu={setMenu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
                     ))}
                 </div>
             </div>
@@ -114,12 +134,12 @@ function DashBoard() {
                 </div>
                 <div className={styles.taskRecords}>
                     {completedData.map(task => (
-                        <TaskCard key={task.id} task={task} />
+                        <TaskCard key={task.id} task={task} setMenu={setMenu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
                     ))}
                 </div>
             </div>
         </div>
-      {showAddTask && <AddTask handleShowAddTask={handleShowAddTask}/>}
+      {showAddTask && <AddTask handleShowAddTask={handleShowAddTask} refreshData={refreshData}/>}
      </div>
   );
 }

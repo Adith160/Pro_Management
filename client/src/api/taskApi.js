@@ -66,6 +66,7 @@ export const createTasks = async ({ title, dueDate, priority, status, checklists
       const reqUrl = `${backendUrl}/tasks/v1/create`;
       const token = localStorage.getItem("token");
       // Include userId as userRefId in the request payload
+      debugger;
       const reqPayload = { title, dueDate, priority, status, checklists }
 
       // Set Authorization header with token
@@ -99,7 +100,53 @@ export const editTasks = async ({ title, dueDate, priority, status, checklists }
         }
   
         // Send POST request to the backend
-        const response = await axios.post(reqUrl, reqPayload);
+        const response = await axios.put(reqUrl, reqPayload);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            toast.error(error.response.data.message);
+        } else {
+            toast.error('Invalid request!');
+        }
+    }
+  };
+
+  export const updateTaskStatus = async (status, taskId) => {
+    try {
+        const reqUrl = `${backendUrl}/tasks/v1/updateTaskStatus/${taskId}/${status}`;
+        debugger;
+        const token = localStorage.getItem("token");
+  
+        // Set Authorization header with token
+        if (token) {
+            axios.defaults.headers.common["Authorization"] = token;
+        }
+  
+        // Send POST request to the backend
+        const response = await axios.put(reqUrl);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            toast.error(error.response.data.message);
+        } else {
+            toast.error('Invalid request!');
+        }
+    }
+  };
+
+  export const deleteTask = async (taskId) => {
+    try {
+        const reqUrl = `${backendUrl}/tasks/v1/delete/${taskId}`;
+        debugger;
+        const token = localStorage.getItem("token");
+  
+        // Set Authorization header with token
+        if (token) {
+            axios.defaults.headers.common["Authorization"] = token;
+        }
+  
+        // Send POST request to the backend
+        const response = await axios.delete(reqUrl);
         return response.data;
     } catch (error) {
         if (error.response && error.response.data.message) {

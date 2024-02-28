@@ -55,12 +55,14 @@
     flex-direction: column;
     align-items: center;
     height: 80%;
+    width: 100%;
     color: rgb(139, 134, 134);
 }
 
 .formDiv form{
     height: 80%;
     margin-top: 10%;
+    width: 100%;
 }
 
 .formDiv input{
@@ -110,6 +112,12 @@ position: relative;
     color: #17A2B8;
 }
 
+.errorText{
+    font-size: 0.7rem;
+    color: red;
+    margin-bottom: -1%;
+}
+
 .view{
     position: absolute;
     top: 45%;
@@ -117,3 +125,4 @@ position: relative;
     transform: translateY(-50%);
     width: 2%;
 }
+

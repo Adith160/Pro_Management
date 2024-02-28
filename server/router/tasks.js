@@ -7,6 +7,7 @@ const { taskController } = require('../controller/taskController');
 router.post('/create', verifyAuth, taskController.createTask);
 router.delete('/delete/:task_id', verifyAuth, taskController.deleteTask);
 router.put('/edit/:task_id', verifyAuth, taskController.editTask);
+router.put('/updateTaskStatus/:taskId/:status', verifyAuth, taskController.updateTaskStatus);
 router.get('/getTaskById/:taskId?', verifyAuth, taskController.getTaskById);
 router.get('/getAllTasksByWeek/:period/:status', verifyAuth, taskController.getAllTasksByWeek);
 router.get('/taskSummary', verifyAuth, taskController.getTaskStatistics );
