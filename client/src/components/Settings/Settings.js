@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import styles from './Settings.module.css'
 import {updateUser} from '../../api/auth'
 import viewIcon from '../../assets/icons/view.png'
-import { useNavigate } from 'react-router-dom';
+import {toast } from 'react-toastify';
+//import { useNavigate } from 'react-router-dom';
 
 function Settings() {
   const [userData, setUserData] = useState({
@@ -16,7 +17,7 @@ function Settings() {
     oldPassword: '', 
     newPassword: '',
   })
-  const navigate= useNavigate();
+  //const navigate= useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const handleOnChange=(e)=>{
@@ -66,7 +67,8 @@ function Settings() {
         localStorage.setItem("token", response.token);
         localStorage.setItem("name", response.name)
         resetForm();
-        navigate('/login');
+        toast.success(response.message);
+        //navigate(/login);
       }
     }
   }

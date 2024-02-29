@@ -52,9 +52,9 @@ function Register() {
     if (userData.email.trim() === "") {
       newErrors.email = "Field Is Required";
     }
-
-    if (userData.password2.trim() === "") {
-      newErrors.password2 = "Field Is Required";
+    debugger;
+    if (userData.password2.trim() === "" || userData.password !== userData.password2) {
+      newErrors.password2 = "Confirm Password Is Not Matching";
     }
 
     // Update the errors state
@@ -75,7 +75,7 @@ function Register() {
         localStorage.setItem("token", response.token);
         localStorage.setItem("name", response.name);
         resetForm();
-        redirectToLogin();
+        navigate("/dashboard");
       }
     }
   };

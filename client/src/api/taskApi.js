@@ -58,6 +58,21 @@ export const getOneTask = async (taskId) => {
       }
     }
   };
+
+  export const getAllSharedTask = async ({period, status}) => {
+    try {
+      debugger;
+      const reqUrl = `${backendUrl}/tasks/v1/getPublicTasks/${period}/${status}`;
+      const response = await axios.get(reqUrl);
+      return response.data;
+    } catch (error){
+      if(error.response.data.message){
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Invalid request!');
+      }
+    }
+  };
   
 
 export const createTasks = async ({ title, dueDate, priority, status, checklists }) => {

@@ -84,9 +84,9 @@ const update = async (req, res) => {
         user.password = hashedPassword;
         user.name = name;
         await user.save();
+        const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
-        res.status(201).json({ message: "User Updated Successfully", success: true });
-
+        res.status(201).json({ message: "User Updated Successfully", token: token, name: name, success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error", success: false });

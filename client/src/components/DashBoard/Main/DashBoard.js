@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './DashBoard.module.css';
-import { editTasks, getAllTaskByWeek, updateTaskStatus } from '../../api/taskApi';
-import TaskCard from './TaskCard/TaskCard';
-import AddTask from './AddTask/AddTask';
-import collapseIcon from '../../assets/icons/codicon_collapse-all.png';
-import addIcon from '../../assets/icons/Add.png';
+import { editTasks, getAllTaskByWeek, updateTaskStatus, getAllSharedTask } from '../../../api/taskApi';
+import TaskCard from '../TaskCard/TaskCard';
+import AddTask from '../AddTask/AddTask';
+import collapseIcon from '../../../assets/icons/codicon_collapse-all.png';
+import addIcon from '../../../assets/icons/Add.png';
 import { toast } from 'react-toastify';
 
 function DashBoard() {
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const [showAddTask, setShowAddTask] = useState(false);
   const userName = localStorage.getItem('name');
   const [period, setPeriod] = useState('thisMonth');
@@ -27,12 +25,28 @@ function DashBoard() {
 
   const fetchTasksByWeek = async (selectedPeriod) => {
     try {
-      // Call your API to get tasks based on the selected week for each status
-      const backlogTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'BackLog' });
-      const todoTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'ToDo' });
-      const inProgressTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'InProgress' });
-      const doneTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'Done' });
-      
+      let backlogTasks = [];
+      let todoTasks = [];
+      let inProgressTasks = [];
+      let doneTasks = [];
+      debugger;
+      // Check if user is logged in
+      const isLoggedIn = !!localStorage.getItem('name');
+  
+      if (isLoggedIn) {
+        // If user is logged in, fetch tasks based on selected period
+        backlogTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'BackLog' });
+        todoTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'ToDo' });
+        inProgressTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'InProgress' });
+        doneTasks = await getAllTaskByWeek({ period: selectedPeriod, status: 'Done' });
+      } else {
+        // If user is not logged in, fetch tasks using getAllSharedTask(period)
+        backlogTasks = await getAllSharedTask({ period: selectedPeriod, status: 'BackLog' });
+        todoTasks = await getAllSharedTask({ period: selectedPeriod, status: 'ToDo' });
+        inProgressTasks = await getAllSharedTask({ period: selectedPeriod, status: 'InProgress' });
+        doneTasks = await getAllSharedTask({ period: selectedPeriod, status: 'Done'});
+      }
+  
       // Update state variables with fetched data for each status
       setBacklogData(backlogTasks.tasks);
       setToDoData(todoTasks.tasks);
@@ -43,6 +57,11 @@ function DashBoard() {
       // Handle error
     }
   }
+
+  const today = new Date();
+  const monthYear = today.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+  const day = today.getDate();
+  const formattedDate = `${day} ${monthYear.replace(' ', ', ')}`;
   
   const handleShowAddTask = (type, taskID) => {
     if(type ==='add'){
@@ -125,8 +144,9 @@ const handleEditTask = async ( title, dueDate, priority, status, checklists ,tas
                 <div className={styles.taskHead}>
                   <span className={styles.headSpan2}>To do</span> 
                   <div>
-                      <img src={addIcon} alt='collapse'style={{width:"35%", height:"40%", marginRight:"20%", cursor:"pointer"}} onClick={()=>handleShowAddTask('add')}/>
-                      <img src={collapseIcon} alt='collapse' style={{width:"40%", height:"60%",cursor:"pointer"}} onClick={handleSetMenu}/>
+                        <img src={addIcon} alt='collapse' style={{ visibility: localStorage.getItem('name') ? "visible" : "hidden", width:"33%", height:"40%", marginRight:"20%", cursor:"pointer" }} onClick={()=>handleShowAddTask('add')} />
+
+                      <img src={collapseIcon} alt='collapse' style={{width:"43%", height:"65%",cursor:"pointer"}} onClick={handleSetMenu}/>
                   </div>
                 </div>
                 <div className={styles.taskRecords}>

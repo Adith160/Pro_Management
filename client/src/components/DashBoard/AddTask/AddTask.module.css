@@ -27,6 +27,7 @@
     border-radius: 1vh;
     font-size: 1rem;
     padding: 1%;
+    margin-top: -1%;
 }
 
 .addDiv form{
@@ -38,7 +39,7 @@
 
 .addDiv form span{
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     display: block;
     margin-bottom: 2%;
 }
@@ -49,7 +50,7 @@
 
 .pLabel{
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     width: 94%;
     height: 4vh;
     border-radius: 1vh;
@@ -62,7 +63,7 @@
     background: none;
     border: 1px solid #b5c1c780;
     border-radius: 1vh;
-    margin: 2% 0% 4% 2%;
+    margin: 4% 0% 4% 2%;
     cursor: pointer;
     display: inline-block;
     text-align: center;
@@ -70,7 +71,7 @@
 
 .prioBtn1{
     width: 22.5%;
-    height: 3.2vh;
+    height: 4vh;
     font-size: small;
     background: none;
     border: 1px solid #b5c1c780;
@@ -98,7 +99,7 @@
     height:21vh; 
     overflow-y: auto; 
     overflow-x: hidden;
-    margin-bottom: 4vh;
+    margin-bottom: 2vh;
 }
 
 .addedTasks label {
@@ -143,8 +144,8 @@ input:focus {
 
 .datePickerWrapper{
     position: absolute;
-    top: 0;
-    right: 3;
+    top: 9vh;
+    right: 15vw;
 }
 
 .dateInput{
@@ -155,4 +156,5 @@ input:focus {
     text-align: center;
     cursor: pointer;
     color: #0d0d0ebe;
+    height: 4.1vh;
 }

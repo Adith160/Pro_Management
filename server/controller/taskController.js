@@ -160,8 +160,9 @@ exports.taskController = {
     //get shared tasks
     getSharedTasks: async (req, res) => {
         try {
-            const period  = req.params.period; 
+            const {period, status}  = req.params; 
             let query = { shared: 1 }; 
+            query.status = status;
     
             // Add period conditions if provided
             let startDate, endDate;
@@ -169,11 +170,11 @@ exports.taskController = {
                 startDate = moment().startOf('day');
                 endDate = moment().endOf('day');
             } else if (period === 'thisWeek') {
-                startDate = moment().startOf('week');
-                endDate = moment().endOf('week');
+                startDate = moment().startOf('day');
+                endDate = moment().add(7, 'days').endOf('day');
             } else if (period === 'thisMonth') {
-                startDate = moment().startOf('month');
-                endDate = moment().endOf('month');
+                startDate = moment().startOf('day');
+                endDate = moment().add(30, 'days').endOf('day');
             } else if (period === 'all') {
                 // nothing to do
             } else {

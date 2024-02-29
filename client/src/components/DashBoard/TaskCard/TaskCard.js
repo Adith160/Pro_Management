@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import PopUp from '../../PopUp/PopUp';
-import { deleteTask , updateTaskShared} from '../../../api/taskApi';
+import { deleteTask, updateTaskShared } from '../../../api/taskApi';
 import greenIcon from '../../../assets/icons/GreenEllipse.png';
 import redIcon from '../../../assets/icons/RedEllipse.png';
 import blueIcon from '../../../assets/icons/BlueEllipse.png';
@@ -44,18 +44,18 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
     return null;
   }
 
-  const { _id='', title = '', priority = '', checklists = [], dueDate = '', status = '' } = task;
+  const { _id = '', title = '', priority = '', checklists = [], dueDate = '', status = '' } = task;
 
-  const toggleDelete = async() => {
+  const toggleDelete = async () => {
     const res = await deleteTask(_id);
-    if(res){
+    if (res) {
       toast.success("Task deleted successfully")
     }
     setShowDelete(false);
     refreshData();
   };
 
-  const handleShareClick= async(_id)=>{
+  const handleShareClick = async (_id) => {
     await updateTaskShared(_id);
   }
 
@@ -70,7 +70,7 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
       <div className={styles.topSection}>
         {priority === 'Low' ? (<span><img src={greenIcon} alt='green'></img> LOW PRIORITY</span>)
           : priority === 'Moderate' ? (<span><img src={blueIcon} alt='blue'></img> MODERATE PRIORITY</span>)
-            : (<span><img src={redIcon} alt='red'></img> HIGH PRIORITY</span>)
+          : (<span><img src={redIcon} alt='red'></img> HIGH PRIORITY</span>)
         }
         <div className={styles.customSelect}>
           <select className={styles.menuSelection} onChange={handleDeleteOptionChange}>
@@ -90,41 +90,41 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
       </span>
 
       <div className={styles.topSection}>
-  <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>Checklist ({checklists.filter(item => item.type === '1').length}/{checklists.length})</span>
-  
-  {!Menu ?
-    (<img src={downIcon} alt='down' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />)
-    : <img src={upIcon} alt='up' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />}
-</div>
+        <span style={{ fontSize: "0.9rem", fontWeight: "500" }}>Checklist ({checklists.filter(item => item.type === '1').length}/{checklists.length})</span>
 
-{Menu &&
- <div className={styles.checklist}>
-  {checklists.map((item, index) => (
-    <div key={index} className={styles.checklistItem}>
-      <label htmlFor={`checkbox-${index}`} className={item.checklist.length > 5 ? styles.multiLine : ''}>
-        <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} checked={item.type === '1'} /> 
-        {item.checklist}
-      </label>
-    </div>
-  ))}
-</div>
+        {!Menu ?
+          (<img src={downIcon} alt='down' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />)
+          : <img src={upIcon} alt='up' style={{ width: "8%", height: "3.5vh", cursor: "pointer" }} onClick={handleShowMenu} />}
+      </div>
 
-}
+      {Menu &&
+        <div className={styles.checklist}>
+          {checklists.map((item, index) => (
+            <div key={index} className={styles.checklistItem}>
+              <label htmlFor={`checkbox-${index}`} className={item.checklist.length > 5 ? styles.multiLine : ''}>
+                <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} checked={item.type === '1'} />
+                {item.checklist}
+              </label>
+            </div>
+          ))}
+        </div>
 
-<div className={styles.bottomSection}>
-  {dueDate ? (
-    <button className={styles.Btn} style={{ width: "23%", cursor:"default", backgroundColor: status ==='Done'? '#63C05B': isDueDateFutureAndNotDone ? '#CF3636' : '', color: status ==='Done'? 'white': isDueDateFutureAndNotDone ? 'white' : 'black' }}>
-      {formattedDueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-    </button>
-  ): <div></div>}
+      }
 
-  <div className={styles.taskBtn}>
-    <button className={styles.Btn} onClick={()=>handleStatusUpdate('BackLog', _id)}>Backlog</button>
-    <button className={styles.Btn} onClick={()=>handleStatusUpdate('ToDo', _id)}>To-Do</button>
-    <button className={styles.Btn} onClick={()=>handleStatusUpdate('InProgress', _id)}>Progress</button>
-    <button className={styles.Btn} onClick={()=>handleStatusUpdate('Done', _id)}>Done</button>
-  </div>
-</div>
+      <div className={styles.bottomSection}>
+        {dueDate ? (
+          <button className={styles.Btn} style={{ width: "23%", cursor: "default", backgroundColor: status === 'Done' ? '#63C05B' : isDueDateFutureAndNotDone ? '#CF3636' : '#DBDBDB', color: status === 'Done' ? 'white' : isDueDateFutureAndNotDone ? 'white' : 'black' }}>
+            {formattedDueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </button>
+        ) : <div></div>}
+
+        <div className={styles.taskBtn}>
+          {status !== 'BackLog' && <button className={styles.Btn} onClick={() => handleStatusUpdate('BackLog', _id)}>Backlog</button>}
+          {status !== 'ToDo' && <button className={styles.Btn} onClick={() => handleStatusUpdate('ToDo', _id)}>To-Do</button>}
+          {status !== 'InProgress' && <button className={styles.Btn} onClick={() => handleStatusUpdate('InProgress', _id)}>Progress</button>}
+          {status !== 'Done' && <button className={styles.Btn} onClick={() => handleStatusUpdate('Done', _id)}>Done</button>}
+        </div>
+      </div>
 
 
       {showDelete && <PopUp setShowDelete={setShowDelete} toggleLogout={toggleDelete} type={'delete'} />}

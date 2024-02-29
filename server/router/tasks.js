@@ -12,7 +12,7 @@ router.delete('/delete/:task_id', verifyAuth, taskController.deleteTask);
 router.get('/getTaskById/:taskId?', verifyAuth, taskController.getTaskById);
 router.get('/getTaskByStatus/:status?', verifyAuth, taskController.getTaskByStatus);
 router.get('/getAllTasksByWeek/:period/:status', verifyAuth, taskController.getAllTasksByWeek);
-router.get('/getPublicTasks/:period', verifyAuth, taskController.getSharedTasks);
+router.get('/getPublicTasks/:period/:status', taskController.getSharedTasks);
 router.get('/taskSummary', verifyAuth, taskController.getTaskStatistics );
 
 module.exports = router;
