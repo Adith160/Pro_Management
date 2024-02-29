@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styles from './DashBoard.module.css';
-import { getAllTaskByWeek, updateTaskStatus } from '../../api/taskApi';
+import { editTasks, getAllTaskByWeek, updateTaskStatus } from '../../api/taskApi';
 import TaskCard from './TaskCard/TaskCard';
 import AddTask from './AddTask/AddTask';
 import collapseIcon from '../../assets/icons/codicon_collapse-all.png';
 import addIcon from '../../assets/icons/Add.png';
+import { toast } from 'react-toastify';
 
 function DashBoard() {
   const today = new Date();
@@ -17,6 +18,8 @@ function DashBoard() {
   const [inProgressData, setInProgressData] = useState([]);
   const [completedData, setCompletedData] = useState([]);
   const [menu, setMenu] = useState(false);
+  const [addTaskType, setAddTaskType] = useState('add');
+  const [taskId_editTask, setTaskId_editTask] = useState('');
 
   useEffect(() => {
     fetchTasksByWeek(period);
@@ -41,7 +44,13 @@ function DashBoard() {
     }
   }
   
-  const handleShowAddTask = () => {
+  const handleShowAddTask = (type, taskID) => {
+    if(type ==='add'){
+      setAddTaskType('add')
+    }else{
+      setAddTaskType('edit')
+      setTaskId_editTask(taskID)
+    }
     setShowAddTask(!showAddTask);
   }
 
@@ -67,7 +76,19 @@ const refreshData =async () => {
     await fetchTasksByWeek('all');
       await fetchTasksByWeek(period);
   } catch (error) {
-      console.error("Refresh error", error);
+      toast.error("Request Failed")
+  }
+}
+
+const handleEditTask = async ( title, dueDate, priority, status, checklists ,taskId)=>{
+  try {
+    if( !title || !priority || !status || !checklists || !taskId) {
+      toast.error("Fill all mandatory fields")
+    }
+    await editTasks( {title, dueDate, priority, status, checklists ,taskId});
+    await refreshData();
+  } catch (error) {
+    toast.error("Request Failed")
   }
 }
   return (
@@ -95,7 +116,7 @@ const refreshData =async () => {
                 </div>
                 <div className={styles.taskRecords}>
                     {backlogData.map(task => (
-                        <TaskCard key={task.id} task={task} setMenu={menu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
+                        <TaskCard key={task.id} task={task} setMenu={menu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData} handleShowAddTask={handleShowAddTask}/>
                     ))}
                 </div>
             </div>
@@ -104,13 +125,13 @@ const refreshData =async () => {
                 <div className={styles.taskHead}>
                   <span className={styles.headSpan2}>To do</span> 
                   <div>
-                      <img src={addIcon} alt='collapse'style={{width:"35%", height:"40%", marginRight:"20%", cursor:"pointer"}} onClick={handleShowAddTask}/>
+                      <img src={addIcon} alt='collapse'style={{width:"35%", height:"40%", marginRight:"20%", cursor:"pointer"}} onClick={()=>handleShowAddTask('add')}/>
                       <img src={collapseIcon} alt='collapse' style={{width:"40%", height:"60%",cursor:"pointer"}} onClick={handleSetMenu}/>
                   </div>
                 </div>
                 <div className={styles.taskRecords}>
                     {toDoData.map(task => (
-                        <TaskCard key={task.id} task={task} setMenu={setMenu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
+                        <TaskCard key={task.id} task={task} setMenu={menu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData} handleShowAddTask={handleShowAddTask}/>
                     ))}
                 </div>
             </div>
@@ -122,7 +143,7 @@ const refreshData =async () => {
                 </div>
                 <div className={styles.taskRecords}>
                     {inProgressData.map(task => (
-                       <TaskCard key={task.id} task={task} setMenu={setMenu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
+                       <TaskCard key={task.id} task={task} setMenu={menu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData} handleShowAddTask={handleShowAddTask}/>
                     ))}
                 </div>
             </div>
@@ -134,12 +155,12 @@ const refreshData =async () => {
                 </div>
                 <div className={styles.taskRecords}>
                     {completedData.map(task => (
-                        <TaskCard key={task.id} task={task} setMenu={setMenu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData}/>
+                        <TaskCard key={task.id} task={task} setMenu={menu} handleStatusUpdate={handleStatusUpdate} refreshData={refreshData} handleShowAddTask={handleShowAddTask}/>
                     ))}
                 </div>
             </div>
         </div>
-      {showAddTask && <AddTask handleShowAddTask={handleShowAddTask} refreshData={refreshData}/>}
+      {showAddTask && <AddTask handleShowAddTask={handleShowAddTask} refreshData={refreshData} handleEditTask={handleEditTask} type={addTaskType} taskId={taskId_editTask}/>}
      </div>
   );
 }

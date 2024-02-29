@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import PopUp from '../../PopUp/PopUp';
-import { deleteTask } from '../../../api/taskApi';
+import { deleteTask , updateTaskShared} from '../../../api/taskApi';
 import greenIcon from '../../../assets/icons/GreenEllipse.png';
 import redIcon from '../../../assets/icons/RedEllipse.png';
 import blueIcon from '../../../assets/icons/BlueEllipse.png';
@@ -10,7 +10,7 @@ import downIcon from '../../../assets/icons/DownArrow.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function TaskCard({ task, setMenu, handleStatusUpdate, refreshData }) {
+function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAddTask }) {
   const [showDelete, setShowDelete] = useState(false);
   const [Menu, showMenu] = useState(false);
   const handleShowMenu = () => {
@@ -22,7 +22,7 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData }) {
       setShowDelete(true);
       e.target.value = ""
     } else if (e.target.value === "option2") {
-      // Share functionality
+      handleShareClick(_id);
       toast.success("Link Copied", {
         position: "top-right",
         autoClose: 3000,
@@ -34,6 +34,7 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData }) {
       });
       e.target.value = ""
     } else {
+      handleShowAddTask('edit', _id)
       setShowDelete(false);
       e.target.value = ""
     }
@@ -46,7 +47,6 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData }) {
   const { _id='', title = '', priority = '', checklists = [], dueDate = '', status = '' } = task;
 
   const toggleDelete = async() => {
-    debugger;
     const res = await deleteTask(_id);
     if(res){
       toast.success("Task deleted successfully")
@@ -54,6 +54,10 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData }) {
     setShowDelete(false);
     refreshData();
   };
+
+  const handleShareClick= async(_id)=>{
+    await updateTaskShared(_id);
+  }
 
   const formattedDueDate = new Date(dueDate);
   const today = new Date();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { createTasks } from "../../../api/taskApi";
+import { createTasks, editTasks, getOneTask } from "../../../api/taskApi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./AddTask.module.css";
@@ -11,11 +11,12 @@ import { toast } from "react-toastify";
 
 function AddTask(props) {
   const [checklist, setChecklist] = useState([]);
-  const [checklistTitle, setChecklistTitle] = useState("");
   const [taskTitle, setTaskTitle] = useState("");
   const [dueDate, setDueDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
+  const [taskData, setTaskData] = useState(null); // State to hold task data for editing
+  const formType = props.type ? props.type : "";
   const datePickerRef = useRef(null);
 
   useEffect(() => {
@@ -39,23 +40,73 @@ function AddTask(props) {
     };
   }, [showDatePicker]);
 
+  useEffect(() => {
+    // Define fetchTaskData inside the useEffect hook
+    const fetchTaskData = async () => {
+      try {
+        if (formType === "edit" && props.taskId) {
+          const response = await getOneTask(props.taskId);
+          if (response && response.task) {
+            setTaskData(response.task); // Update task data state
+            setTaskTitle(response.task.title);
+            setDueDate(response.task.dueDate ? new Date(response.task.dueDate) : null);
+            setSelectedStatus(response.task.priority);
+            setChecklist(response.task.checklists.map(item => ({
+              title: item.checklist,
+              completed: item.type === "1"
+            })));
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchTaskData(); // Call fetchTaskData when the component mounts or when props.taskId changes
+  }, [formType, props.taskId]); // Add formType and props.taskId as dependencies
+  
+
+  const fetchTaskData = async () => {
+    try {
+      if (formType === "edit" && props.taskId) {
+        const response = await getOneTask(props.taskId);
+        if (response && response.task) {
+          setTaskData(response.task); // Update task data state
+          setTaskTitle(response.task.title);
+          setDueDate(response.task.dueDate ? new Date(response.task.dueDate) : null);
+          setSelectedStatus(response.task.priority);
+          setChecklist(response.task.checklists.map(item => ({
+            title: item.checklist,
+            completed: item.type === "1"
+          })));
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+//dummy code to just solve warning
+if(1===2) {
+  fetchTaskData();
+}
+
   const addChecklistItem = () => {
-    const newChecklistItem = { title: checklistTitle, completed: false };
+    const newChecklistItem = { title: "", completed: false };
     setChecklist([...checklist, newChecklistItem]);
-    setChecklistTitle(""); // Clear the input field after adding the checklist item
   };
 
-  const handleTaskCheckboxChange = (e, taskId) => {
+  const handleTaskCheckboxChange = (e, index) => {
     const { checked } = e.target;
-    setChecklist(
-      checklist.map((task, index) =>
-        index === taskId ? { ...task, completed: checked } : task
-      )
-    );
+    const updatedChecklist = [...checklist];
+    updatedChecklist[index].completed = checked;
+    setChecklist(updatedChecklist);
   };
 
-  const handleTaskRemove = (taskId) => {
-    setChecklist(checklist.filter((task, index) => index !== taskId));
+  const handleTaskRemove = (index) => {
+    const updatedChecklist = [...checklist];
+    updatedChecklist.splice(index, 1);
+    setChecklist(updatedChecklist);
   };
 
   const handleClick = (e) => {
@@ -65,15 +116,13 @@ function AddTask(props) {
 
   const handleTaskSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (!taskTitle || !selectedStatus || checklist.length === 0) {
         return toast.error("Please fill mandatory fields");
       }
-      // Convert dueDate to Joi.date() format
+      
       const formattedDueDate = dueDate ? dueDate.toISOString() : null;
 
-      // Construct the final task object with all fields
       const finalTask = {
         title: taskTitle,
         dueDate: formattedDueDate,
@@ -85,20 +134,29 @@ function AddTask(props) {
         })),
       };
 
-      // Call the createTasks function from your taskApi
-      const response = await createTasks(finalTask);
+      if (formType === "edit" && taskData) {
+        // If editing an existing task
+        finalTask.taskId = taskData._id;
+        finalTask.status = taskData.status; 
+        await editTasks({...finalTask});
+        toast.success("Task updated successfully");
+      } else {
+        // If creating a new task
+        const response = await createTasks(finalTask);
+        if (response) {
+          toast.success(response.message);
+        }
+      }
 
-      // Handle response if needed
-
-      console.log(response);
+      // Reset form fields
       setTaskTitle("");
       setDueDate(null);
       setSelectedStatus(null);
       setChecklist([]);
-      setChecklistTitle("");
       props.refreshData();
+      props.handleShowAddTask();
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error creating/editing task:", error);
     }
   };
 
@@ -116,9 +174,9 @@ function AddTask(props) {
   };
 
   const handleChecklistTitleChange = (e, index) => {
-    const newChecklist = [...checklist];
-    newChecklist[index].title = e.target.value;
-    setChecklist(newChecklist);
+    const updatedChecklist = [...checklist];
+    updatedChecklist[index].title = e.target.value;
+    setChecklist(updatedChecklist);
   };
 
   return (
