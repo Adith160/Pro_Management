@@ -22,7 +22,7 @@ exports.taskController = {
         }
     },
 
-    //Router for edit task
+    // edit task
     editTask : async (req, res) => {
         try {
             const user = req.user.id;
@@ -48,12 +48,10 @@ exports.taskController = {
         }
     },
 
+    //update task status
     updateTaskStatus: async (req, res) => {
         try {
-            // Extract user ID from the request
             const user = req.user.id;
-    
-            // Extract status and task ID from the request parameters
             const status = req.params.status;
             const taskId = req.params.taskId;
     
@@ -62,10 +60,8 @@ exports.taskController = {
                 return res.status(400).json({ error: "Missing required parameters", success: false });
             }
     
-            // Update only the status field of the task
             const updateStatus = await Task.updateOne({ _id: taskId, userRefId: user }, { $set: { status: status } });
     
-            // Check if the task was updated successfully
             if (!updateStatus || updateStatus.nModified === 0) {
                 return res.status(404).json({ message: "Task not found or not updated", success: false });
             }
@@ -75,7 +71,32 @@ exports.taskController = {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error', success: false });
         }
-    },    
+    },   
+    
+    //update task as shared
+    updateTaskShared: async (req, res) => {
+        try {
+            const user = req.user.id;
+            const shared = req.params.shared;
+            const taskId = req.params.taskId;
+    
+            // Validate input
+            if (!shared || !taskId) {
+                return res.status(400).json({ error: "Missing required parameters", success: false });
+            }
+    
+            const updateStatus = await Task.updateOne({ _id: taskId, userRefId: user }, { $set: { shared: 1 } });
+    
+            if (!updateStatus || updateStatus.nModified === 0) {
+                return res.status(404).json({ message: "Task not found or not updated", success: false });
+            }
+    
+            res.status(200).json({ message: "Task shared successfully", success: true });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error', success: false });
+        }
+    }, 
 
     // Delete a task
     deleteTask: async (req, res) => {
@@ -97,7 +118,7 @@ exports.taskController = {
         }
     },
 
-    // Get all tasks or a specific task by ID
+    // Get task by ID
     getTaskById: async (req, res) => {
         try {
             if (req.params.taskId) {
@@ -135,58 +156,94 @@ exports.taskController = {
             res.status(500).json({ error: 'Internal Server Error', success: false });
         }
     },
+
+    //get shared tasks
+    getSharedTasks: async (req, res) => {
+        try {
+            const period  = req.params.period; 
+            let query = { shared: 1 }; 
+    
+            // Add period conditions if provided
+            let startDate, endDate;
+            if (period === 'today') {
+                startDate = moment().startOf('day');
+                endDate = moment().endOf('day');
+            } else if (period === 'thisWeek') {
+                startDate = moment().startOf('week');
+                endDate = moment().endOf('week');
+            } else if (period === 'thisMonth') {
+                startDate = moment().startOf('month');
+                endDate = moment().endOf('month');
+            } else if (period === 'all') {
+                // nothing to do
+            } else {
+                return res.status(400).json({ message: 'Invalid period parameter', success: false });
+            }
+    
+            if (startDate && endDate) {
+                query.dueDate = { $gte: startDate.toDate(), $lte: endDate.toDate() };
+            }
+    
+            const tasks = await Task.find(query);
+    
+            res.status(200).json({ tasks, success: true });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error', success: false });
+        }
+    },    
     
 
-   // Get tasks by week
-getAllTasksByWeek: async (req, res) => {
-    try {
-        const { period, status } = req.params;
-        const userId = req.user.id;
-        let query = {};
-        let startDate, endDate;
-
-        if (period === 'today') {
-            startDate = moment().startOf('day');
-            endDate = moment().endOf('day');
-        } else if (period === 'thisWeek') {
-            startDate = moment().startOf('day');
-            endDate = moment().add(7, 'days').endOf('day');
-        } else if (period === 'thisMonth') {
-            startDate = moment().startOf('day');
-            endDate = moment().add(30, 'days').endOf('day');
-        } else if (period === 'all') {
-            // nothing to do
-        } else {
-            return res.status(400).json({ message: 'Invalid period parameter', success: false });
-        }
+   // Get all tasks by week
+    getAllTasksByWeek: async (req, res) => {
+        try {
+            const { period, status } = req.params;
+            const userId = req.user.id;
+            let query = {};
+            let startDate, endDate;
         
-        query.userRefId = userId;
-
-        if (startDate) {
-            startDate.utc();
-            endDate.utc();
-        }
+            if (period === 'today') {
+                startDate = moment().startOf('day');
+                endDate = moment().endOf('day');
+            } else if (period === 'thisWeek') {
+                startDate = moment().startOf('day');
+                endDate = moment().add(7, 'days').endOf('day');
+            } else if (period === 'thisMonth') {
+                startDate = moment().startOf('day');
+                endDate = moment().add(30, 'days').endOf('day');
+            } else if (period === 'all') {
+                // nothing to do
+            } else {
+                return res.status(400).json({ message: 'Invalid period parameter', success: false });
+            }
+            
+            query.userRefId = userId;
         
-        if (status) {
-            query.status = status;
+            if (startDate) {
+                startDate.utc();
+                endDate.utc();
+            }
+            
+            if (status) {
+                query.status = status;
+            }
+        
+            // Add condition to include tasks with null dueDate
+            if (period !== 'all') {
+                query.$or = [
+                    { dueDate: { $gte: startDate.toDate(), $lte: endDate.toDate() } },
+                    { dueDate: null }
+                ];
+            }
+        
+            const tasks = await Task.find(query);
+        
+            res.status(200).json({ tasks, success: true });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error', success: false });
         }
-
-        // Add condition to include tasks with null dueDate
-        if (period !== 'all') {
-            query.$or = [
-                { dueDate: { $gte: startDate.toDate(), $lte: endDate.toDate() } },
-                { dueDate: null }
-            ];
-        }
-
-        const tasks = await Task.find(query);
-
-        res.status(200).json({ tasks, success: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error', success: false });
-    }
-},
+    },
     
     //get task anlytics
     getTaskStatistics: async (req, res) => {
@@ -204,7 +261,7 @@ getAllTasksByWeek: async (req, res) => {
     
             const currentDate = new Date();
             const dueDateTasksCount = await Task.countDocuments({ 
-                dueDate: { $lt: currentDate }, // Due date is in the past
+                dueDate: { $lt: currentDate }, 
                 userRefId: userId 
             });
     

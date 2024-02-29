@@ -1,31 +1,35 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const taskSchema = new mongoose.Schema({
-    title:{
+    title: {
         type: String,
-        require: true,
+        required: true,
     },
-    dueDate:{
+    dueDate: {
         type: Date,
     },
-    priority:{
+    priority: {
         type: String,
         default: "Low",
-        require: true,
+        required: true,
     },
-    status:{
+    status: {
         type: String,
         default: "BackLog",
-        require: true,
+        required: true,
     },
-    checklists:{
+    checklists: {
         type: Array,
         required: true,
     },
-    userRefId:{
+    userRefId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
+    },
+    shared: {
+        type: Number,
+        default: 0,
     }
-})
+});
 
-module.exports = mongoose.model("Taks",taskSchema);
+module.exports = mongoose.model("Task", taskSchema);
