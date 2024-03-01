@@ -88,17 +88,17 @@ function Settings() {
           <h2>Settings</h2>
         <input name='name' placeholder='Name' type='text' value={userData.name} onChange={handleOnChange}   className={styles.nameIcon}></input>
         {errors.name && <div className={styles.errorText}>{errors.name}</div>}
+
+        <div className={styles.inputDiv} >
         <input name='oldPassword' placeholder='Old Password' type={showPassword ? 'text' : 'password'} value={userData.oldPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
-        <img src={viewIcon} alt='view' className={styles.view} style={errors.name ? { top: "29.5%" } : {}} onClick={togglePasswordVisibility }/>
+        <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility }/>
+        </div>
         {errors.oldPassword && <div className={styles.errorText}>{errors.oldPassword}</div>}
+
+        <div className={styles.inputDiv} >
         <input name='newPassword' placeholder='New Password' type={showPassword2 ? 'text' : 'password'} value={userData.newPassword} onChange={handleOnChange} className={styles.lockIcon}></input>
-        <img src={viewIcon} alt='view' className={styles.view2} style={
-                  errors.name && errors.oldPassword
-                    ? { top: "39.5%" }
-                    : errors.name || errors.oldPassword
-                    ? { top: "37.5%" }
-                    : {}
-                } onClick={togglePasswordVisibility2 }/>
+        <img src={viewIcon} alt='view' className={styles.view} onClick={togglePasswordVisibility2 }/>
+        </div>
         {errors.newPassword && <div className={styles.errorText}>{errors.newPassword}</div>}
         <button className={styles.submitBtn} type='submit'>Update</button>
       </form>

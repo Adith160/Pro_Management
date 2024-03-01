@@ -103,6 +103,8 @@ function Login() {
               {errors.email && (
                 <div className={styles.errorText}>{errors.email}</div>
               )}
+              
+              <div className={styles.inputDiv} >
               <input
                 name="password"
                 placeholder="Password"
@@ -111,13 +113,15 @@ function Login() {
                 onChange={handleOnChange}
                 className={styles.lockIcon}
               ></input>
+
               <img
                 src={viewIcon}
                 alt="view"
                 className={styles.view}
-                style={errors.email ? { top: "47%" } : {}}
                 onClick={togglePasswordVisibility}
               />
+
+              </div>
               {errors.password && (
                 <div className={styles.errorText}>{errors.password}</div>
               )}

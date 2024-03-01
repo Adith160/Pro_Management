@@ -1,52 +1,51 @@
-.mainDiv{
-    height: 100%;
-    width: 100vw;
-    position: fixed;
-    background-color: rgba(181, 193, 199, 0.502);
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    left: 0;
+.mainDiv {
+  height: 100%;
+  width: 100vw;
+  position: fixed;
+  background-color: rgba(181, 193, 199, 0.502);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
 }
 
-.popup{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 20%;
-    width: 18%;
-    background-color: white;
-    border-radius: 1vh;
+.popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 20%;
+  width: 18%;
+  background-color: white;
+  border-radius: 1vh;
 }
 
-.popup span{
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 5%;
+.popup span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 5%;
 }
 
-.popup button{
-    width: 90%;
-    height: 25%;
-    margin-top: 2%;
-    border-radius: 1.5vh;
-    font-size: 0.7rem;
-    font-weight: 700;
-    cursor: pointer;
+.popup button {
+  width: 90%;
+  height: 25%;
+  margin-top: 2%;
+  border-radius: 1.5vh;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.red{
-    border:1px solid red;
-    color:red;
-    background: none;
+.red {
+  border: 1px solid red;
+  color: red;
+  background: none;
 }
 
-.blue{
-    border-color: #17A2B8;  
-    color: white;
-    border: none;
+.blue {
+  border-color: #17a2b8;
+  color: white;
+  border: none;
 }
-

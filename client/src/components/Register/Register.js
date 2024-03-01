@@ -130,6 +130,7 @@ function Register() {
               {errors.email && (
                 <div className={styles.errorText}>{errors.email}</div>
               )}
+              <div className={styles.inputDiv} >
               <input
                 name="password"
                 placeholder="Password"
@@ -142,15 +143,9 @@ function Register() {
                 src={viewIcon}
                 alt="view"
                 className={styles.view}
-                style={
-                  errors.email && errors.name
-                    ? { top: "54%" }
-                    : errors.email || errors.name
-                    ? { top: "52.5%" }
-                    : {}
-                }
                 onClick={togglePasswordVisibility}
               />
+              </div>
               {errors.password && (
                 <div className={styles.errorText}>{errors.password}</div>
               )}
@@ -160,7 +155,7 @@ function Register() {
                 type="password"
                 value={userData.password2}
                 onChange={handleOnChange}
-                className={styles.lockIcon}
+                className={styles.lockIcon2}
               ></input>
               {errors.password2 && (
                 <div className={styles.errorText}>{errors.password2}</div>

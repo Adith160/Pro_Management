@@ -1,108 +1,106 @@
-.taskCardDiv{
-    margin: 5% 4% 0 4%;
-    height: min-content;
-    width: 92%;
-    background-color: rgba(255, 255, 255, 0.884);
-    border-radius: 2vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+.taskCardDiv {
+  margin: 5% 4% 0 4%;
+  height: min-content;
+  width: 92%;
+  background-color: rgba(255, 255, 255, 0.884);
+  border-radius: 2vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-.topSection{
-    display: flex;
-    width: 90%;
-    justify-content: space-between;
-    font-size: 0.6rem;
-    margin: 7% 0% 0% 5%;
+.topSection {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  margin: 7% 0% 0% 5%;
 }
 
 .customSelect {
-    position: relative;
-    width: 30%;
-  }
-  
-  .customSelect::after {
-    content: url('../../../assets/icons/Menu.png');
-    position: absolute;
-    top: 50%;
-    right: 8%;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-  
-  .menuSelection {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    padding-right: 5%;
-    width: 120%;
-    border: none;
-    outline: none; 
-    cursor: pointer;
-  }
-  
-  .menuSelection option {
-    border: none; 
-  }
-  
-
-  .weekSelection option:checked {
-    display: none;
-  }
-  
-.title{
-    font-size: large;
-    font-weight: 500;
-    margin: 2% 0% -1% 5%;
+  position: relative;
+  width: 30%;
 }
 
-.checklist{
-    width: 90%;
-    margin: 1% 0% 0% 4%;
-    font-size: small;
-    display: flex;
-    flex-direction: column;
+.customSelect::after {
+  content: url("../../../assets/icons/Menu.png");
+  position: absolute;
+  top: 50%;
+  right: 8%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
-.checklist label{
-    border: 1.5px solid #dbe2e7;
-    width: 100%;
-    border-radius: 1.5vh;
-    margin-top: 3%;
-    display: flex;
-    padding: 2%;
-    color: black;
-    font-weight: 500;
+.menuSelection {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 5%;
+  width: 120%;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 
-.bottomSection{
-    display: flex;
-    width: 90%;
-    justify-content: space-between;
-    border: none;
-    margin: 5% 0% 7% 5%;
+.menuSelection option {
+  border: none;
 }
 
-.taskBtn{
-    display: flex;
-    justify-content: space-between;
-    width: 60%;
+.weekSelection option:checked {
+  display: none;
+}
 
+.title {
+  font-size: large;
+  font-weight: 500;
+  margin: 2% 0% -1% 5%;
+}
+
+.checklist {
+  width: 90%;
+  margin: 1% 0% 0% 4%;
+  font-size: small;
+  display: flex;
+  flex-direction: column;
+}
+
+.checklist label {
+  border: 1.5px solid #dbe2e7;
+  width: 100%;
+  border-radius: 1.5vh;
+  margin-top: 3%;
+  display: flex;
+  padding: 2%;
+  color: black;
+  font-weight: 500;
+}
+
+.bottomSection {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  border: none;
+  margin: 5% 0% 7% 5%;
+}
+
+.taskBtn {
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
 }
 
 .Btn {
-    font-size: 0.5rem;
-    border: none;
-    border-radius: 1.5vh;
-    cursor:pointer;
-    width: 32%;
-    height: 3.5vh;
+  font-size: 0.5rem;
+  border: none;
+  border-radius: 1.5vh;
+  cursor: pointer;
+  width: 32%;
+  height: 3.5vh;
 }
 
 /* TaskCard.module.css */
 .toastContainer {
-  border: 1px solid rgb(178, 240, 98); 
+  border: 1px solid rgb(178, 240, 98);
   background-color: rgb(242, 248, 248);
   color: black;
   border-radius: 1.5vh;

@@ -1,132 +1,142 @@
-.loginPage{
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    font-family: "Open Sans", sans-serif;
+.loginPage {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  font-family: "Open Sans", sans-serif;
 }
 
-.imageDiv{
-    height: 100vh;
-    width: 65vw;
-    background-color: #17A2B8;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    background-image: url('../../assets/images/Back.png');
-    background-position: 52vh 8vw;
-    background-repeat: no-repeat;
-    background-size: 45vh 20vw;
+.imageDiv {
+  height: 100vh;
+  width: 65vw;
+  background-color: #17a2b8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-image: url("../../assets/images/Back.png");
+  background-position: center 9.5vw;
+  background-repeat: no-repeat;
+  background-size: 45vh 20vw;
 }
 
-.texts{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 10%;
-    margin-top: -2%;
+.texts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 10%;
+  margin-top: -2%;
 }
 
-.span1{
-    font-size: 1.8rem;
+.span1 {
+  font-size: 1.8rem;
 }
 
-.span2{
-    font-size: 0.8rem;
+.span2 {
+  font-size: 0.8rem;
 }
 
-.loginDiv{
-    height: 100vh;
-    width: 35vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.loginDiv {
+  height: 100vh;
+  width: 35vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.mainDiv{
-    height: 75%;
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+.mainDiv {
+  height: 75%;
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
-.formDiv{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 80%;
-    width: 100%;
-    color: rgb(139, 134, 134);
+.formDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80%;
+  width: 100%;
+  color: rgb(139, 134, 134);
 }
 
-.formDiv form{
-    height: 80%;
-    margin-top: 10%;
-    width: 100%;
+.formDiv form {
+  height: 80%;
+  margin-top: 10%;
+  width: 100%;
 }
 
-.formDiv input{
-height: 12%;
-width: 90%;
-margin-top: 3%;
-border: 1px solid rgb(224, 218, 218);
-border-radius: 1vh;
-background-repeat: no-repeat;
-background-position: 10px center; 
-background-size: 20px; 
-padding-left: 40px;
+.formDiv input {
+  height: 12%;
+  width: 88%;
+  margin-top: 3%;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 20px;
+  padding-left: 40px;
 }
 
-.mailIcon{
-background-image: url('../../assets/icons/mail.png'); 
+.inputDiv {
+  display: flex;
+  border: 1px solid rgb(224, 218, 218);
+  border-radius: 1vh;
+  margin-top: 3%;
+  padding-bottom: 1%;
 }
 
-.lockIcon{
-background-image: url('../../assets/icons/lock.png');    
-position: relative;
+.inputDiv input {
+  border: none;
 }
 
-.formDiv button{
-    width: 100%;
-    margin-top: 3%;
-    border-radius: 3vh;
-    cursor: pointer;
+.mailIcon {
+  border: 1px solid rgb(224, 218, 218);
+  border-radius: 1vh;
+  background-image: url("../../assets/icons/mail.png");
 }
 
-.submitBtn{
-    height: 13%;
-    background-color: #17A2B8;
-    border: none;
-    color: white;
+.lockIcon {
+  background-image: url("../../assets/icons/lock.png");
+  position: relative;
 }
 
-.span3{
-    font-size: 0.9rem;
-    margin-top: -30%;
+.formDiv button {
+  width: 100%;
+  margin-top: 3%;
+  border-radius: 3vh;
+  cursor: pointer;
 }
 
-.loginBtn{
-    height: 11%;
-    background-color: white;
-    border: 1px solid #17A2B8;
-    color: #17A2B8;
+.submitBtn {
+  height: 13%;
+  background-color: #17a2b8;
+  border: none;
+  color: white;
 }
 
-.errorText{
-    font-size: 0.7rem;
-    color: red;
-    margin-bottom: -1%;
+.span3 {
+  font-size: 0.9rem;
+  margin-top: -30%;
 }
 
-.view{
-    position: absolute;
-    top: 45%;
-    right: 60px; 
-    transform: translateY(-50%);
-    width: 2%;
+.loginBtn {
+  height: 11%;
+  background-color: white;
+  border: 1px solid #17a2b8;
+  color: #17a2b8;
 }
 
+.errorText {
+  font-size: 0.7rem;
+  color: red;
+  margin-bottom: -1%;
+}
+
+.view {
+  width: 7.5%;
+  height: 18%;
+  margin: 1% 1% 0 0;
+  cursor: pointer;
+}

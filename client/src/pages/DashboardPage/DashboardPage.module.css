@@ -1,40 +1,40 @@
-body{
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    font-family: 'poppins';
-    
-    position: relative;
-    overflow-y: hidden;
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  font-family: "poppins";
+
+  position: relative;
+  overflow-y: hidden;
 }
 
-.mainDiv{
-    display: flex;
+.mainDiv {
+  display: flex;
 }
 
-.mainContainer{
-    height: 100vh;
-    width: 83vw;
-    display: flex;
-    flex-wrap: wrap;
+.mainContainer {
+  height: 100vh;
+  width: 83vw;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 ::-webkit-scrollbar {
-    width: 1.3vh;
-    height: 1.2vh;
+  width: 1.3vh;
+  height: 1.2vh;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: transparent;
-    /* Make the track transparent */
+  background-color: transparent;
+  /* Make the track transparent */
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #8DAAB9; 
-    border-radius: 6px;
+  background-color: #8daab9;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-corner {
-    background-color: transparent; 
+  background-color: transparent;
 }
