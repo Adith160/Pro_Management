@@ -1,0 +1,84 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: "poppins";
+    position: relative;
+    overflow-y: hidden;
+  }
+  
+  .mainDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .mainContainer{
+    height: 65vh;
+    width: 40vw;
+    border: 1px solid #E2E2E2;
+    border-radius: 1vh;
+    padding: 1%;
+  }
+
+  .topSection{
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    margin: 4% 0% 0% 5%;
+  }
+
+  .title {
+    font-size: large;
+    font-weight: 500;
+    margin: 2% 0% -3% 5%;
+  }
+
+  .checklist {
+    width: 90%;
+    height: 60%;
+    margin: 0% 0% 0% 4%;
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .checklist label {
+    border: 1.5px solid #dbe2e7;
+    width: 98%;
+    border-radius: 1.5vh;
+    margin-top: 2%;
+    display: flex;
+    padding: 2%;
+    color: black;
+    font-weight: 500;
+  }
+  
+  .bottomSection {
+    display: flex;
+    width: 90%;
+    justify-content: flex-start;
+    align-items: center;
+    border: none;
+    margin: 5% 0% 7% 5%;
+  }
+
+  .Btn {
+    font-size: 0.5rem;
+    border: none;
+    border-radius: 1.5vh;
+    width: 32%;
+    height: 4.5vh;
+    margin-left: 5%;
+  }
+
+  .dueLbl{
+    font-weight: 500;
+    font-size: 0.9rem;
+  }

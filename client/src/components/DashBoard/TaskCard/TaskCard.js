@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import PopUp from '../../PopUp/PopUp';
-import { deleteTask, updateTaskShared } from '../../../api/taskApi';
+import { deleteTask, updateChecklistType } from '../../../api/taskApi';
 import greenIcon from '../../../assets/icons/GreenEllipse.png';
 import redIcon from '../../../assets/icons/RedEllipse.png';
 import blueIcon from '../../../assets/icons/BlueEllipse.png';
@@ -18,20 +18,14 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
   };
 
   const handleDeleteOptionChange = (e) => {
-    if (e.target.value === "option3") {
+    const { value } = e.target;
+    const { _id } = task;
+
+    if (value === "option3") {
       setShowDelete(true);
       e.target.value = ""
-    } else if (e.target.value === "option2") {
+    } else if (value === "option2") {
       handleShareClick(_id);
-      toast.success("Link Copied", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        className: styles.toastContainer, // Custom CSS class for the toast container
-      });
       e.target.value = ""
     } else {
       handleShowAddTask('edit', _id)
@@ -40,13 +34,8 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
     }
   };
 
-  if (!task) {
-    return null;
-  }
-
-  const { _id = '', title = '', priority = '', checklists = [], dueDate = '', status = '' } = task;
-
   const toggleDelete = async () => {
+    const { _id } = task;
     const res = await deleteTask(_id);
     if (res) {
       toast.success("Task deleted successfully")
@@ -56,13 +45,34 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
   };
 
   const handleShareClick = async (_id) => {
-    await updateTaskShared(_id);
+    localStorage.setItem("taskId", _id);
+    const link = window.location.href.replace('/dashboard', '') + '/publicpage';
+    navigator.clipboard.writeText(link);
+    toast.success("Link Copied");
   }
+
+  const handleCheckboxChange = async (index) => {
+    const { _id } = task;
+    const type = task.checklists[index].type === '1' ? '0' : '1';
+
+    try {
+      await updateChecklistType(_id, index, type);
+      refreshData();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update checklist type");
+    }
+  };
+
+  if (!task) {
+    return null;
+  }
+
+  const { _id = '', title = '', priority = '', checklists = [], dueDate = '', status = '' } = task;
 
   const formattedDueDate = new Date(dueDate);
   const today = new Date();
 
-  // Check if due date is in the future and task is not done
   const isDueDateFutureAndNotDone = formattedDueDate < today && status !== 'Done';
 
   return (
@@ -101,14 +111,14 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
         <div className={styles.checklist}>
           {checklists.map((item, index) => (
             <div key={index} className={styles.checklistItem}>
+              {/* Added onChange event handler to each checkbox */}
               <label htmlFor={`checkbox-${index}`} className={item.checklist.length > 5 ? styles.multiLine : ''}>
-                <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} checked={item.type === '1'} />
+                <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} checked={item.type === '1'} onChange={() => handleCheckboxChange(index)} />
                 {item.checklist}
               </label>
             </div>
           ))}
         </div>
-
       }
 
       <div className={styles.bottomSection}>

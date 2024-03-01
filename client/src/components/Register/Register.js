@@ -32,14 +32,13 @@ function Register() {
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: "", // Clear the error when the user makes a change
+      [name]: "", 
     }));
   };
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form fields
     const newErrors = {};
     if (userData.name.trim() === "") {
       newErrors.name = "Field Is Required";
@@ -57,7 +56,6 @@ function Register() {
       newErrors.password2 = "Confirm Password Is Not Matching";
     }
 
-    // Update the errors state
     setErrors(newErrors);
 
     const resetForm = () => {

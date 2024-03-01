@@ -9,8 +9,7 @@ const taskValidationSchema = Joi.object({
         checklist: Joi.string().required(),
         type: Joi.string().required() 
     })).required(),
-    userRefId: Joi.string().hex().length(24).required(),
-    shared: Joi.number().default(0)
+    userRefId: Joi.string().hex().length(24).required()
 });
 
 module.exports = taskValidationSchema;

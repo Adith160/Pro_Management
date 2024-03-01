@@ -22,15 +22,30 @@ export const getTaskSummary = async () => {
   }
 };
 
-////api for get task by Id
+//api for get task by Id
 export const getOneTask = async (taskId) => {
   try {
-    const reqUrl = `${backendUrl}/tasks/v1/getTaskById/${taskId}`; // Modify the URL to include taskId
+    const reqUrl = `${backendUrl}/tasks/v1/getTaskById/${taskId}`; 
     const token = localStorage.getItem("token");
     if (token) {
       axios.defaults.headers.common["Authorization"] = token;
     }
 
+    const response = await axios.get(reqUrl);
+    return response.data;
+  } catch (error) {
+    if (error.response.data.message) {
+      toast.error(error.response.data.message);
+    } else {
+      toast.error("Invalid request!");
+    }
+  }
+};
+
+//api for get task by Id public
+export const getPublicTaskById = async (taskId) => {
+  try {
+    const reqUrl = `${backendUrl}/tasks/v1/getPublicTaskById/${taskId}`;
     const response = await axios.get(reqUrl);
     return response.data;
   } catch (error) {
@@ -64,7 +79,6 @@ export const getAllTaskByWeek = async ({ period, status }) => {
 //api for public visibility
 export const getAllSharedTask = async ({ period, status }) => {
   try {
-    debugger;
     const reqUrl = `${backendUrl}/tasks/v1/getPublicTasks/${period}/${status}`;
     const response = await axios.get(reqUrl);
     return response.data;
@@ -142,12 +156,12 @@ export const updateTaskStatus = async (status, taskId) => {
   }
 };
 
-//api for sharing task
-export const updateTaskShared = async (taskId) => {
+//api for updating checklist type
+export const updateChecklistType = async (taskId, index, type) => {
   try {
-    const reqUrl = `${backendUrl}/tasks/v1/updateTaskShared/${taskId}/1`;
+    const reqUrl = `${backendUrl}/tasks/v1/updateChecklistType/${taskId}/${index}/${type}`;
     const token = localStorage.getItem("token");
-    debugger;
+
     if (token) {
       axios.defaults.headers.common["Authorization"] = token;
     }

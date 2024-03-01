@@ -44,7 +44,6 @@ const handleShowLogout=(e)=>{
           </li>
         </ul>
       </div>
-      {/* {localStorage.getItem('name') ? (<button className={styles.logOut} onClick={handleShowLogout}><img src={logoutIcon} alt='logo' style={{marginRight:'15%', width:'19%'}} />Log out</button>) : <button className={styles.logOut} onClick={()=> navigate('/login')} style={{color: 'green'}} >Log In</button>} */}
      
       <button className={styles.logOut} onClick={handleShowLogout}><img src={logoutIcon} alt='logo' style={{marginRight:'15%', width:'19%'}} />Log out</button>
       {showLogout && <Logout handleShowLogout={handleShowLogout} toggleLogout={toggleLogout} type={'logout'}/>}

@@ -26,10 +26,6 @@ const taskSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
-    shared: {
-        type: Number,
-        default: 0,
-    }
 });
 
 module.exports = mongoose.model("Task", taskSchema);

@@ -41,13 +41,12 @@ function AddTask(props) {
   }, [showDatePicker]);
 
   useEffect(() => {
-    // Define fetchTaskData inside the useEffect hook
     const fetchTaskData = async () => {
       try {
         if (formType === "edit" && props.taskId) {
           const response = await getOneTask(props.taskId);
           if (response && response.task) {
-            setTaskData(response.task); // Update task data state
+            setTaskData(response.task); 
             setTaskTitle(response.task.title);
             setDueDate(response.task.dueDate ? new Date(response.task.dueDate) : null);
             setSelectedStatus(response.task.priority);
@@ -62,8 +61,8 @@ function AddTask(props) {
       }
     };
   
-    fetchTaskData(); // Call fetchTaskData when the component mounts or when props.taskId changes
-  }, [formType, props.taskId]); // Add formType and props.taskId as dependencies
+    fetchTaskData(); 
+  }, [formType, props.taskId]); 
   
 
   const fetchTaskData = async () => {
@@ -71,7 +70,7 @@ function AddTask(props) {
       if (formType === "edit" && props.taskId) {
         const response = await getOneTask(props.taskId);
         if (response && response.task) {
-          setTaskData(response.task); // Update task data state
+          setTaskData(response.task); 
           setTaskTitle(response.task.title);
           setDueDate(response.task.dueDate ? new Date(response.task.dueDate) : null);
           setSelectedStatus(response.task.priority);
@@ -86,7 +85,6 @@ function AddTask(props) {
     }
   };
 
-//dummy code to just solve warning
 if(1===2) {
   fetchTaskData();
 }
