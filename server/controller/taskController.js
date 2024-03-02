@@ -96,34 +96,40 @@ exports.taskController = {
     }
   },
 
-//update the checklist type
-updateChecklistType: async (req, res) => {
+  //update the checklist type
+  updateChecklistType: async (req, res) => {
     try {
       const user = req.user.id;
       const { taskId, index, type } = req.params;
-  
+
       if (!taskId || !index || !type) {
-        return res.status(400).json({ error: "Missing required parameters", success: false });
+        return res
+          .status(400)
+          .json({ error: "Missing required parameters", success: false });
       }
-  
+
       const task = await Task.findOne({ _id: taskId, userRefId: user });
-  
+
       if (!task) {
-        return res.status(404).json({ message: "Task not found", success: false });
+        return res
+          .status(404)
+          .json({ message: "Task not found", success: false });
       }
-  
+
       if (!task.checklists || !task.checklists[index]) {
-        return res.status(404).json({ message: "Checklist item not found", success: false });
+        return res
+          .status(404)
+          .json({ message: "Checklist item not found", success: false });
       }
-  
+
       // Update the type of the checklist item at the specified index
       task.checklists[index].type = type;
-  
+
       // Mark the document as modified
-      task.markModified('checklists');
-  
+      task.markModified("checklists");
+
       await task.save();
-  
+
       res.status(200).json({
         message: "Checklist type updated successfully",
         success: true,
@@ -132,9 +138,7 @@ updateChecklistType: async (req, res) => {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error", success: false });
     }
-  }
-  ,
-
+  },
   // Delete a task
   deleteTask: async (req, res) => {
     try {
@@ -299,10 +303,19 @@ updateChecklistType: async (req, res) => {
       }
 
       if (status) {
-        query.status = status;
+        if (status === "backlog") {
+          query.$or = [
+            {
+              status: { $in: ["BackLog", "InProgress", "ToDo", "Done"] },
+              dueDate: { $lt: moment().startOf("day").toDate() },
+            },
+          ];
+        } else {
+          query.status = status;
+        }
       }
 
-      if (period !== "all") {
+      if (period !== "all" && status !== "BackLog") {
         query.$or = [
           { dueDate: { $gte: startDate.toDate(), $lte: endDate.toDate() } },
           { dueDate: null },
@@ -316,8 +329,7 @@ updateChecklistType: async (req, res) => {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error", success: false });
     }
-  } ,
-
+  },
   //get task anlytics
   getTaskStatistics: async (req, res) => {
     try {
