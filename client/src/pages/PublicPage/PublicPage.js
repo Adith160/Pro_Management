@@ -4,6 +4,7 @@ import { getPublicTaskById } from '../../api/taskApi';
 import greenIcon from '../../assets/icons/GreenEllipse.png';
 import redIcon from '../../assets/icons/RedEllipse.png';
 import blueIcon from '../../assets/icons/BlueEllipse.png';
+import logo from '../../assets/icons/codesandbox.png'
 
 function PublicPage() {
    const [taskData, setTaskData] = useState([]);
@@ -32,6 +33,7 @@ function PublicPage() {
     const formattedDueDate = new Date(dueDate);
   return (
     <div className={styles.mainDiv}>
+       <div className={styles.headings}> <img src={logo} alt='logo' style={{marginRight:'5%'}}/>  Pro Manage</div>
         <div className={styles.mainContainer}>
         <div className={styles.topSection}>
         {priority === 'Low' ? (<span><img src={greenIcon} alt='green'></img> LOW PRIORITY</span>)
