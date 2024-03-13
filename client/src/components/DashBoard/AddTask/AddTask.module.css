@@ -32,7 +32,7 @@
 .addDiv form {
   width: 88%;
   height: 50%;
-  margin: 5% 0% 0% 6%;
+  margin: 3% 0% 0% 6%;
   position: relative;
 }
 
@@ -66,6 +66,7 @@
   cursor: pointer;
   display: inline-block;
   text-align: center;
+  padding-top: 0.6%;
 }
 
 .prioBtn1 {
@@ -79,6 +80,10 @@
   cursor: pointer;
   display: inline-block;
   text-align: center;
+}
+
+.paddingLbl {
+  padding-top: 0.7%;
 }
 
 .prioBtn img {

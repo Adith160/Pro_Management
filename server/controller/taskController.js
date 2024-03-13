@@ -231,45 +231,6 @@ exports.taskController = {
     }
   },
 
-  //get shared tasks
-  getSharedTasks: async (req, res) => {
-    try {
-      const { period, status } = req.params;
-      let query = { shared: 1 };
-      query.status = status;
-
-      // Add period conditions if provided
-      let startDate, endDate;
-      if (period === "today") {
-        startDate = moment().startOf("day");
-        endDate = moment().endOf("day");
-      } else if (period === "thisWeek") {
-        startDate = moment().startOf("day");
-        endDate = moment().add(7, "days").endOf("day");
-      } else if (period === "thisMonth") {
-        startDate = moment().startOf("day");
-        endDate = moment().add(30, "days").endOf("day");
-      } else if (period === "all") {
-        // nothing to do
-      } else {
-        return res
-          .status(400)
-          .json({ message: "Invalid period parameter", success: false });
-      }
-
-      if (startDate && endDate) {
-        query.dueDate = { $gte: startDate.toDate(), $lte: endDate.toDate() };
-      }
-
-      const tasks = await Task.find(query);
-
-      res.status(200).json({ tasks, success: true });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal Server Error", success: false });
-    }
-  },
-
   // Get all tasks by week
   getAllTasksByWeek: async (req, res) => {
     try {
@@ -287,8 +248,6 @@ exports.taskController = {
       } else if (period === "thisMonth") {
         startDate = moment().startOf("day");
         endDate = moment().add(30, "days").endOf("day");
-      } else if (period === "all") {
-        // nothing to do
       } else {
         return res
           .status(400)
@@ -303,24 +262,17 @@ exports.taskController = {
       }
 
       if (status) {
-        if (status === "backlog") {
-          query.$or = [
-            {
-              status: { $in: ["BackLog", "InProgress", "ToDo", "Done"] },
-              dueDate: { $lt: moment().startOf("day").toDate() },
-            },
-          ];
-        } else {
-          query.status = status;
-        }
+        query.status = status;
       }
 
-      if (period !== "all" && status !== "BackLog") {
-        query.$or = [
-          { dueDate: { $gte: startDate.toDate(), $lte: endDate.toDate() } },
-          { dueDate: null },
-        ];
-      }
+      const overdueQuery = {
+        dueDate: { $lt: moment().startOf("day").toDate() },
+        status: { $nin: ["Done"] },
+      };
+      const currentPeriodQuery = {
+        dueDate: { $gte: startDate.toDate(), $lte: endDate.toDate() },
+      };
+      query.$or = [overdueQuery, currentPeriodQuery];
 
       const tasks = await Task.find(query);
 
@@ -330,6 +282,7 @@ exports.taskController = {
       res.status(500).json({ error: "Internal Server Error", success: false });
     }
   },
+
   //get task anlytics
   getTaskStatistics: async (req, res) => {
     try {
