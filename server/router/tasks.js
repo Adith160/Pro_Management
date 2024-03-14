@@ -13,7 +13,6 @@ router.get('/getTaskById/:taskId?', verifyAuth, taskController.getTaskById);
 router.get('/getPublicTaskById/:taskId?', taskController.getPublicTaskById);
 router.get('/getTaskByStatus/:status?', verifyAuth, taskController.getTaskByStatus);
 router.get('/getAllTasksByWeek/:period/:status', verifyAuth, taskController.getAllTasksByWeek);
-router.get('/getPublicTasks/:period/:status', taskController.getSharedTasks);
 router.get('/taskSummary', verifyAuth, taskController.getTaskStatistics );
 
 module.exports = router;

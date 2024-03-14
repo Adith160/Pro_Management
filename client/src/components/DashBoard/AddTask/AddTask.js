@@ -46,38 +46,45 @@ function AddTask(props) {
         if (formType === "edit" && props.taskId) {
           const response = await getOneTask(props.taskId);
           if (response && response.task) {
-            setTaskData(response.task); 
+            setTaskData(response.task);
             setTaskTitle(response.task.title);
-            setDueDate(response.task.dueDate ? new Date(response.task.dueDate) : null);
+            setDueDate(
+              response.task.dueDate ? new Date(response.task.dueDate) : null
+            );
             setSelectedStatus(response.task.priority);
-            setChecklist(response.task.checklists.map(item => ({
-              title: item.checklist,
-              completed: item.type === "1"
-            })));
+            setChecklist(
+              response.task.checklists.map((item) => ({
+                title: item.checklist,
+                completed: item.type === "1",
+              }))
+            );
           }
         }
       } catch (error) {
         console.log(error);
       }
     };
-  
-    fetchTaskData(); 
-  }, [formType, props.taskId]); 
-  
+
+    fetchTaskData();
+  }, [formType, props.taskId]);
 
   const fetchTaskData = async () => {
     try {
       if (formType === "edit" && props.taskId) {
         const response = await getOneTask(props.taskId);
         if (response && response.task) {
-          setTaskData(response.task); 
+          setTaskData(response.task);
           setTaskTitle(response.task.title);
-          setDueDate(response.task.dueDate ? new Date(response.task.dueDate) : null);
+          setDueDate(
+            response.task.dueDate ? new Date(response.task.dueDate) : null
+          );
           setSelectedStatus(response.task.priority);
-          setChecklist(response.task.checklists.map(item => ({
-            title: item.checklist,
-            completed: item.type === "1"
-          })));
+          setChecklist(
+            response.task.checklists.map((item) => ({
+              title: item.checklist,
+              completed: item.type === "1",
+            }))
+          );
         }
       }
     } catch (error) {
@@ -85,9 +92,9 @@ function AddTask(props) {
     }
   };
 
-if(1===2) {
-  fetchTaskData();
-}
+  if (1 === 2) {
+    fetchTaskData();
+  }
 
   const addChecklistItem = () => {
     const newChecklistItem = { title: "", completed: false };
@@ -118,7 +125,7 @@ if(1===2) {
       if (!taskTitle || !selectedStatus || checklist.length === 0) {
         return toast.error("Please fill mandatory fields");
       }
-      
+
       const formattedDueDate = dueDate ? dueDate.toISOString() : null;
 
       const finalTask = {
@@ -135,8 +142,8 @@ if(1===2) {
       if (formType === "edit" && taskData) {
         // If editing an existing task
         finalTask.taskId = taskData._id;
-        finalTask.status = taskData.status; 
-        await editTasks({...finalTask});
+        finalTask.status = taskData.status;
+        await editTasks({ ...finalTask });
         toast.success("Task updated successfully");
       } else {
         // If creating a new task
@@ -265,7 +272,7 @@ if(1===2) {
                   alt="delete"
                   style={{
                     float: "right",
-                    marginRight: "2%",
+                    margin: "1% 2% 0% 0%",
                     cursor: "pointer",
                   }}
                   onClick={() => handleTaskRemove(index)}
@@ -302,7 +309,7 @@ if(1===2) {
             )}
             <div style={{ width: "60%" }}>
               <label
-                className={styles.prioBtn1}
+                className={`${styles.prioBtn1} ${styles.paddingLbl}`}
                 style={{
                   color: "red",
                   border: "1px solid red",

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import styles from "./Login.module.css";
 import logoArt from "../../assets/images/Art.png";
@@ -29,12 +28,13 @@ function Login() {
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: "", 
+      [name]: "", // Clear the error when the user makes a change
     }));
   };
 
   const handleUserSubmit = async (e) => {
     e.preventDefault();
+    // Validate form fields
     const newErrors = {};
     if (userData.password.trim() === "") {
       newErrors.password = "Field Is Required";
@@ -89,6 +89,7 @@ function Login() {
           <div className={styles.titleDiv}>
             <h3>Login</h3>
           </div>
+          {/* form starts here */}
           <div className={styles.formDiv}>
             <form onSubmit={handleUserSubmit} autocomplete="off">
               <input

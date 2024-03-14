@@ -19,12 +19,9 @@ function DashBoard() {
   const [toDoData, setToDoData] = useState([]);
   const [inProgressData, setInProgressData] = useState([]);
   const [completedData, setCompletedData] = useState([]);
+  const [menu, setMenu] = useState(false);
   const [addTaskType, setAddTaskType] = useState("add");
   const [taskId_editTask, setTaskId_editTask] = useState("");
-  const [backlogMenu, setBacklogMenu] = useState(false);
-  const [todoMenu, setTodoMenu] = useState(false);
-  const [inProgressMenu, setInProgressMenu] = useState(false);
-  const [doneMenu, setDoneMenu] = useState(false);
 
   useEffect(() => {
     fetchTasksByWeek(period);
@@ -36,6 +33,7 @@ function DashBoard() {
       let todoTasks = [];
       let inProgressTasks = [];
       let doneTasks = [];
+      debugger;
       const isLoggedIn = !!localStorage.getItem("name");
 
       if (isLoggedIn) {
@@ -87,20 +85,8 @@ function DashBoard() {
     setPeriod(e.target.value);
   };
 
-   const handleSetBacklogMenu = () => {
-    setBacklogMenu(!backlogMenu);
-  };
-
-  const handleSetTodoMenu = () => {
-    setTodoMenu(!todoMenu);
-  };
-
-  const handleSetInProgressMenu = () => {
-    setInProgressMenu(!inProgressMenu);
-  };
-
-  const handleSetDoneMenu = () => {
-    setDoneMenu(!doneMenu);
+  const handleSetMenu = () => {
+    setMenu(false);
   };
 
   const handleStatusUpdate = async (value, taskId) => {
@@ -170,7 +156,6 @@ function DashBoard() {
               src={collapseIcon}
               alt="collapse"
               className={styles.collapse}
-              onClick={handleSetBacklogMenu}
             />
           </div>
           <div className={styles.taskRecords}>
@@ -178,7 +163,7 @@ function DashBoard() {
               <TaskCard
                 key={task.id}
                 task={task}
-                menu={backlogMenu}
+                setMenu={menu}
                 handleStatusUpdate={handleStatusUpdate}
                 refreshData={refreshData}
                 handleShowAddTask={handleShowAddTask}
@@ -210,7 +195,7 @@ function DashBoard() {
                 src={collapseIcon}
                 alt="collapse"
                 style={{ width: "43%", height: "65%", cursor: "pointer" }}
-                onClick={handleSetTodoMenu}
+                onClick={handleSetMenu}
               />
             </div>
           </div>
@@ -219,7 +204,7 @@ function DashBoard() {
               <TaskCard
                 key={task.id}
                 task={task}
-                menu={todoMenu}
+                setMenu={menu}
                 handleStatusUpdate={handleStatusUpdate}
                 refreshData={refreshData}
                 handleShowAddTask={handleShowAddTask}
@@ -235,7 +220,6 @@ function DashBoard() {
               src={collapseIcon}
               alt="collapse"
               className={styles.collapse}
-              onClick={handleSetInProgressMenu}
             />
           </div>
           <div className={styles.taskRecords}>
@@ -243,7 +227,7 @@ function DashBoard() {
               <TaskCard
                 key={task.id}
                 task={task}
-                menu={inProgressMenu}
+                setMenu={menu}
                 handleStatusUpdate={handleStatusUpdate}
                 refreshData={refreshData}
                 handleShowAddTask={handleShowAddTask}
@@ -259,7 +243,6 @@ function DashBoard() {
               src={collapseIcon}
               alt="collapse"
               className={styles.collapse}
-              onClick={handleSetDoneMenu}
             />
           </div>
           <div className={styles.taskRecords}>
@@ -267,7 +250,7 @@ function DashBoard() {
               <TaskCard
                 key={task.id}
                 task={task}
-                menu={doneMenu}
+                setMenu={menu}
                 handleStatusUpdate={handleStatusUpdate}
                 refreshData={refreshData}
                 handleShowAddTask={handleShowAddTask}

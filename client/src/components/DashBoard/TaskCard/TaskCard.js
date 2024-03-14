@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import PopUp from '../../PopUp/PopUp';
 import { deleteTask, updateChecklistType } from '../../../api/taskApi';
@@ -10,19 +10,14 @@ import downIcon from '../../../assets/icons/DownArrow.png';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function TaskCard({ task, menu, handleStatusUpdate, refreshData, handleShowAddTask }) {
+function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAddTask }) {
   const [showDelete, setShowDelete] = useState(false);
-  const [Menu, showMenu] = useState('');
+  const [Menu, showMenu] = useState(false);
   const handleShowMenu = () => {
     showMenu(!Menu);
   };
 
-  useEffect(()=>{
-    debugger;
-    showMenu(false)
-  }, [menu])
-
-  const handleOptionChange = (e) => {
+  const handleDeleteOptionChange = (e) => {
     const { value } = e.target;
     const { _id } = task;
 
@@ -88,7 +83,7 @@ function TaskCard({ task, menu, handleStatusUpdate, refreshData, handleShowAddTa
           : (<span><img src={redIcon} alt='red'></img> HIGH PRIORITY</span>)
         }
         <div className={styles.customSelect}>
-          <select className={styles.menuSelection} onChange={handleOptionChange}>
+          <select className={styles.menuSelection} onChange={handleDeleteOptionChange}>
             <option value=""></option>
             <option value="option1">Edit</option>
             <option value="option2">Share</option>
@@ -116,6 +111,7 @@ function TaskCard({ task, menu, handleStatusUpdate, refreshData, handleShowAddTa
         <div className={styles.checklist}>
           {checklists.map((item, index) => (
             <div key={index} className={styles.checklistItem}>
+              {/* Added onChange event handler to each checkbox */}
               <label htmlFor={`checkbox-${index}`} className={item.checklist.length > 5 ? styles.multiLine : ''}>
                 <input id={`checkbox-${index}`} type='checkbox' value={item.checklist} checked={item.type === '1'} onChange={() => handleCheckboxChange(index)} />
                 {item.checklist}
@@ -139,6 +135,7 @@ function TaskCard({ task, menu, handleStatusUpdate, refreshData, handleShowAddTa
           {status !== 'Done' && <button className={styles.Btn} onClick={() => handleStatusUpdate('Done', _id)}>Done</button>}
         </div>
       </div>
+
 
       {showDelete && <PopUp setShowDelete={setShowDelete} toggleLogout={toggleDelete} type={'delete'} />}
     </div>

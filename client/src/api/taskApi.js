@@ -76,21 +76,6 @@ export const getAllTaskByWeek = async ({ period, status }) => {
   }
 };
 
-//api for public visibility
-export const getAllSharedTask = async ({ period, status }) => {
-  try {
-    const reqUrl = `${backendUrl}/tasks/v1/getPublicTasks/${period}/${status}`;
-    const response = await axios.get(reqUrl);
-    return response.data;
-  } catch (error) {
-    if (error.response.data.message) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error("Invalid request!");
-    }
-  }
-};
-
 //api for creating a task
 export const createTasks = async ({title, dueDate,priority, status,checklists,}) => {
   try {
