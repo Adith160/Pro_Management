@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './TaskCard.module.css';
 import PopUp from '../../PopUp/PopUp';
 import { deleteTask, updateChecklistType } from '../../../api/taskApi';
@@ -16,6 +16,10 @@ function TaskCard({ task, setMenu, handleStatusUpdate, refreshData, handleShowAd
   const handleShowMenu = () => {
     showMenu(!Menu);
   };
+
+  useEffect(() => {
+    showMenu(false);
+  }, [setMenu]);
 
   const handleDeleteOptionChange = (e) => {
     const { value } = e.target;

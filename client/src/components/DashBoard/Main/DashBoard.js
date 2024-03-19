@@ -86,7 +86,7 @@ function DashBoard() {
   };
 
   const handleSetMenu = () => {
-    setMenu(false);
+    setMenu(!menu);
   };
 
   const handleStatusUpdate = async (value, taskId) => {
